@@ -7,4 +7,6 @@ module.exports = {
     SPEECH_TYPE_SSML: 'SSML',
 
     ERROR_MESSAGE_INVALID_TYPE: 'Invalid Type',
+
+    CARD_TYPE_SIMPLE: 'Simple'
 };

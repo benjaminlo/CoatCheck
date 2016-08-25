@@ -2,6 +2,7 @@
 
 let Constants = require('./constants.js');
 let Speech = require('./speech.js');
+let Card = require('./card.js');
 
 function buildSpeechletResponse (options) {
     let alexaResponse = {
@@ -61,7 +62,29 @@ class Response {
         }
 
         this._context.succeed(buildSpeechletResponse({
-            speech
+            speech,
+            shouldEndSession: true
+        }));
+    }
+
+    /**
+     * Responds to the Alexa skill with a JSON object indicating that the echo
+     * should prompt the user with text-to-speech audio as specified in
+     * {@param speech} and display content as a card in the Alexa companion app.
+     * 
+     * @this {Response}
+     * @param {Speech} speech The speech object that will be sent to the skill.
+     * @param {Card} card The card object that will be sent to the skill.
+     */
+    tellWithCard (speech, card) {
+        if (!(speech instanceof Speech) || !(card instanceof Card)) {
+            throw Constants.ERROR_MESSAGE_INVALID_TYPE;
+        }
+
+        this._context.succeed(buildSpeechletResponse({
+            speech,
+            card,
+            shouldEndSession: true
         }));
     }
 }
