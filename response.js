@@ -51,6 +51,55 @@ class Response {
     /**
      * Responds to the Alexa skill with a JSON object indicating that the echo
      * should prompt the user with text-to-speech audio as specified in
+     * {@param speech} and then wait for a response.
+     * 
+     * @this {Response}
+     * @param {Speech} speech The speech object that will be sent to the skill
+     * as the main text-to-speech audio.
+     * @param {Speech} repromptSpeech The speech object that will be sent to the
+     * skill as the reprompt text-to-speech audio.
+     */
+    ask (speech, repromptSpeech) {
+        if (!(speech instanceof Speech) || !(repromptSpeech instanceof Speech)) {
+            throw Constants.ERROR_MESSAGE_INVALID_TYPE;
+        }
+
+        this._context.succeed(buildSpeechletResponse({
+            speech,
+            reprompt: repromptSpeech,
+            shouldEndSession: false
+        }));
+    }
+
+    /**
+     * Responds to the Alexa skill with a JSON object indicating that the echo
+     * should prompt the user with text-to-speech audio as specified in
+     * {@param speech} and display content as a card in the Alexa companion app
+     * and then wait for a response.
+     * 
+     * @this {Response}
+     * @param {Speech} speech The speech object that will be sent to the skill
+     * as the main text-to-speech audio.
+     * @param {Speech} repromptSpeech The speech object that will be sent to the
+     * skill as the reprompt text-to-speech audio.
+     * @param {Card} card The card object that will be sent to the skill.
+     */
+    askWithCard (speech, repromptSpeech, card) {
+        if (!(speech instanceof Speech) || !(repromptSpeech instanceof Speech)) {
+            throw Constants.ERROR_MESSAGE_INVALID_TYPE;
+        }
+
+        this._context.succeed(buildSpeechletResponse({
+            speech,
+            reprompt: repromptSpeech,
+            card,
+            shouldEndSession: false
+        }));
+    }
+
+    /**
+     * Responds to the Alexa skill with a JSON object indicating that the echo
+     * should prompt the user with text-to-speech audio as specified in
      * {@param speech}.
      * 
      * @this {Response}
