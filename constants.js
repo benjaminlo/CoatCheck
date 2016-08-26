@@ -7,6 +7,11 @@ module.exports = {
     SPEECH_TYPE_SSML: 'SSML',
 
     ERROR_MESSAGE_INVALID_TYPE: 'Invalid Type',
+    ERROR_MESSAGE_INVALID_APP_ID: 'Invalid Application ID',
+    ERROR_MESSAGE_INVALID_APP_ID_MSG: 'The Application IDs do not match.',
+
+    MESSAGE_EXPECTED: 'Expected: ',
+    MESSAGE_ACTUAL: 'Actual: ',
 
     CARD_TYPE_SIMPLE: 'Simple'
 };
