@@ -1,8 +1,8 @@
 'use strict';
 
-let Constants = require('./constants.js');
-let Speech = require('./speech.js');
-let Card = require('./card.js');
+const Constants = require('./constants.js');
+const Speech = require('./speech.js');
+const Card = require('./card.js');
 
 function buildSpeechletResponse (options) {
     let alexaResponse = {

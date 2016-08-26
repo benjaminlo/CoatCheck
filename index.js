@@ -1,8 +1,8 @@
 'use strict';
 
-let Constants = require('./constants.js');
-let Response = require('./response.js');
-let Speech = require('./speech.js');
+const Constants = require('./constants.js');
+const Response = require('./response.js');
+const Speech = require('./speech.js');
 
 const APP_ID = undefined; // replace with "amzn1.echo-sdk.amz-.app.[your-unique-value-here]"
 

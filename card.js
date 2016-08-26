@@ -1,6 +1,6 @@
 'use strict';
 
-let Constants = require('./constants.js');
+const Constants = require('./constants.js');
 
 /**
  * A Card object is used to create a valid JSON object that will be used to tell
