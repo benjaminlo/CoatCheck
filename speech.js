@@ -13,7 +13,7 @@ class Speech {
      * @param {String} type The type of speech. This can either be `'SSML'` or
      * `'PlainText'`. Any other value, or null, will throw an error.
      * @param {String} text The text that is being said by the Alexa skill. If
-     * the {@param type} is set to `'SSML'`, then be sure to use valid SSML
+     * the type is set to `'SSML'`, then be sure to use valid SSML
      * formatting including the surrounding `<speak>...</speak>` tags.
      */
     constructor (type, text) {

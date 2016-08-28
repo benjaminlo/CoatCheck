@@ -8,18 +8,22 @@ const APP_ID = undefined; // replace with "amzn1.echo-sdk.amz-.app.[your-unique-
 
 exports.handler = (event, context, callback) => {
     let appId;
+    let session;
 
     if (!event) {
         event = {};
     }
 
-    if (!event.session) {
-        event.session = {};
+    if (event.session) {
+        session = event.session;
+        appId = session.application.applicationId;
+    } else {
+        session = {};
+        appId = event.context.System.application.applicationId;
     }
 
     validateAppId(appId);
 
-    let session = event.session || {};
     let response = new Response(context, session);
 };
 

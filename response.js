@@ -30,7 +30,7 @@ function buildSpeechletResponse (options) {
     }
 
     return returnResult;
-};
+}
 
 /**
  * A Response object is used to create a valid JSON response that will respond
@@ -50,8 +50,8 @@ class Response {
 
     /**
      * Responds to the Alexa skill with a JSON object indicating that the echo
-     * should prompt the user with text-to-speech audio as specified in
-     * {@param speech} and then wait for a response.
+     * should prompt the user with text-to-speech audio as specified in speech
+     * and then wait for a response.
      * 
      * @this {Response}
      * @param {Speech} speech The speech object that will be sent to the skill
@@ -73,9 +73,9 @@ class Response {
 
     /**
      * Responds to the Alexa skill with a JSON object indicating that the echo
-     * should prompt the user with text-to-speech audio as specified in
-     * {@param speech} and display content as a card in the Alexa companion app
-     * and then wait for a response.
+     * should prompt the user with text-to-speech audio as specified in speech
+     * and display content as a card in the Alexa companion app and then wait
+     * for a response.
      * 
      * @this {Response}
      * @param {Speech} speech The speech object that will be sent to the skill
@@ -99,8 +99,7 @@ class Response {
 
     /**
      * Responds to the Alexa skill with a JSON object indicating that the echo
-     * should prompt the user with text-to-speech audio as specified in
-     * {@param speech}.
+     * should prompt the user with text-to-speech audio as specified in speech.
      * 
      * @this {Response}
      * @param {Speech} speech The speech object that will be sent to the skill.
@@ -118,9 +117,9 @@ class Response {
 
     /**
      * Responds to the Alexa skill with a JSON object indicating that the echo
-     * should prompt the user with text-to-speech audio as specified in
-     * {@param speech} and display content as a card in the Alexa companion app.
-     * 
+     * should prompt the user with text-to-speech audio as specified in speech
+     * and display content as a card in the Alexa companion app.
+     *
      * @this {Response}
      * @param {Speech} speech The speech object that will be sent to the skill.
      * @param {Card} card The card object that will be sent to the skill.

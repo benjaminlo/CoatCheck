@@ -13,5 +13,7 @@ module.exports = {
     MESSAGE_EXPECTED: 'Expected: ',
     MESSAGE_ACTUAL: 'Actual: ',
 
+    CONSTANTS_NEW_LINE: '\n',
+
     CARD_TYPE_SIMPLE: 'Simple'
 };
