@@ -5,12 +5,23 @@ const Response = require('./response.js');
 const Speech = require('./speech.js');
 
 let APP_ID;
-
 let onLaunch;
 let handlers = {};
 let onSessionEnded;
 
+/**
+ * An AlexaStarterKit object is used to handle custom intents and requests to an Alexa skill.
+ */
 class AlexaStarterKit {
+
+    /**
+     * @this {AlexaStarterKit}
+     * @param {Object} appId The ID of the application.
+     * @param {Object} exports The variable to export the Lambda handler to.
+     * @param {Object} launchHandler The custom launch callback to be executed.
+     * @param {Object} intentHandlers The custom intent callbacks to be executed.
+     * @param {Object} sessionEndedHandler The custom session ended callback to be executed.
+     */
     constructor (appId, exports, launchHandler, intentHandlers, sessionEndedHandler) {
         APP_ID = appId;
 
@@ -41,6 +52,12 @@ class AlexaStarterKit {
     }
 }
 
+/**
+ * Verifies that the request is intended for your service by checking that APP_ID (the application ID from the constructor)
+ * is the same as appId (the application ID from exports.handler).
+ *
+ * @param {Object} appId The application ID from exports.handler.
+ */
 function validateAppId (appId) {
     if (APP_ID && APP_ID !== appId) {
         console.log(Constants.ERROR_MESSAGE_INVALID_APP_ID_MSG
@@ -51,6 +68,14 @@ function validateAppId (appId) {
     }
 }
 
+/**
+ * Responds to a request made to an Alexa skill based on the request type (LaunchRequest, IntentRequest, and
+ * SessionEndedRequest required).
+ *
+ * @param {Object} event The event object from exports.handler.
+ * @param {Object} context The context passed in from Alexa.
+ * @param {Object} session The session passed in from Alexa.
+ */
 function makeResponse(event, context, session) {
     let response = new Response(context, session);
 
@@ -70,6 +95,12 @@ function makeResponse(event, context, session) {
     }
 }
 
+/**
+ * Checks if the custom intent callback function exists and if so, calls it.
+ *
+ * @param {Object} event The event object from exports.handler.
+ * @param {Response} response The response object created in makeResponse.
+ */
 function handleIntent(event, response) {
     let callback = handlers[event.request.intent.name];
     if (callback) {
