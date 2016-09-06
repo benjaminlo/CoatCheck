@@ -1,38 +1,32 @@
 'use strict';
 
+const Alexa = require('./alexaStarterKit.js');
 const Constants = require('./constants.js');
-const Response = require('./response.js');
 const Speech = require('./speech.js');
 
 const APP_ID = undefined; // replace with "amzn1.echo-sdk.amz-.app.[your-unique-value-here]"
 
-exports.handler = (event, context, callback) => {
-    let appId;
-    let session;
-
-    if (!event) {
-        event = {};
-    }
-
-    if (event.session) {
-        session = event.session;
-        appId = session.application.applicationId;
-    } else {
-        session = {};
-        appId = event.context.System.application.applicationId;
-    }
-
-    validateAppId(appId);
-
-    let response = new Response(context, session);
+let onLaunch = (response) => {
+    // Put your custom launch logic in here
+    response.ask(new Speech(Constants.SPEECH_TYPE_SSML, '<speak>Replace this with a launch menu.</speak>'),
+        new Speech(Constants.SPEECH_TYPE_SSML, '<speak>Replace this with reprompt text.</speak>'));
 };
 
-function validateAppId (appId) {
-    if (APP_ID && APP_ID !== appId) {
-        console.log(Constants.ERROR_MESSAGE_INVALID_APP_ID_MSG
-            + Constants.CONSTANTS_NEW_LINE + Constants.MESSAGE_EXPECTED + APP_ID
-            + Constants.CONSTANTS_NEW_LINE + Constants.MESSAGE_ACTUAL + appId);
+let onSessionEnded = () => {
+    // Put your custom session ended logic in here
+};
 
-        throw Constants.ERROR_MESSAGE_INVALID_APP_ID;
+let intentHandlers = {
+    'YourIntent': (response) => {
+        response.tell(new Speech(Constants.SPEECH_TYPE_SSML, '<speak>Replace this with your intent response.</speak>'));
+    },
+    'AMAZON.HelpIntent': (response) => {
+        response.ask(new Speech(Constants.SPEECH_TYPE_SSML, '<speak>Replace this with an actual help menu.</speak>'),
+            new Speech(Constants.SPEECH_TYPE_SSML, '<speak>Replace this with reprompt text.</speak>'));
+    },
+    'AMAZON.StopIntent': (response) => {
+        response.tell(new Speech(Constants.SPEECH_TYPE_SSML, '<speak>Replace this with stop message.</speak>'));
     }
-}
+};
+
+let alexa = new Alexa(APP_ID, exports, onLaunch, intentHandlers, onSessionEnded);

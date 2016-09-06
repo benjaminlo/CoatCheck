@@ -15,5 +15,9 @@ module.exports = {
 
     CONSTANTS_NEW_LINE: '\n',
 
-    CARD_TYPE_SIMPLE: 'Simple'
+    CARD_TYPE_SIMPLE: 'Simple',
+
+    REQUEST_TYPE_LAUNCH: 'LaunchRequest',
+    REQUEST_TYPE_INTENT: 'IntentRequest',
+    REQUEST_TYPE_SESSION_ENDED: 'SessionEndedRequest'
 };
