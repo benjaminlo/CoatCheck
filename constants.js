@@ -30,5 +30,8 @@ module.exports = {
     REQUEST_TYPE_PLAYBACK_CONTROLLER_NEXT_COMMAND_ISSUED: 'PlaybackController.NextCommandIssued',
     REQUEST_TYPE_PLAYBACK_CONTROLLER_PAUSE_COMMAND_ISSUED: 'PlaybackController.PauseCommandIssued',
     REQUEST_TYPE_PLAYBACK_CONTROLLER_PLAY_COMMAND_ISSUED: 'PlaybackController.PlayCommandIssued',
-    REQUEST_TYPE_PLAYBACK_CONTROLLER_PREVIOUS_COMMAND_ISSUED: 'PlaybackController.PreviousCommandIssued'
+    REQUEST_TYPE_PLAYBACK_CONTROLLER_PREVIOUS_COMMAND_ISSUED: 'PlaybackController.PreviousCommandIssued',
+
+    // replace this with your intent names
+    YOUR_INTENT_NAME: 'YourIntent'
 };

@@ -9,6 +9,8 @@ let onLaunch = (response) => {
     throw 'Unimplemented launch handler.';
 };
 let handlers = {};
+let audioHandlers = {};
+let playbackHandlers = {};
 let onSessionEnded = () => {
     throw 'Unimplemented session ended handler.';
 };
@@ -74,7 +76,8 @@ class Alexa {
      * This is required if you want your skill to reply to the user when they give your skill commands.
      *
      * @this {Alexa}
-     * @param {Object} intentHandlers The custom intent callbacks to be executed.
+     * @param {Object} intentHandlers The custom intent callbacks to be executed. In a dictionary where the name of the
+     * intent is the key and the callback is the value.
      */
     setIntentHandlers (intentHandlers) {
         handlers = intentHandlers;
@@ -91,11 +94,35 @@ class Alexa {
         onSessionEnded = sessionEndedHandler;
         return this;
     }
+
+    /**
+     * This is required if you want your skill to run logic after receiving an audio player request.
+     *
+     * @this {Alexa}
+     * @param {Object} audioPlayerHandlers The custom audio player callbacks to be executed. In a dictionary where the
+     * name of the request type is the key and the callback is the value.
+     */
+    setAudioPlayerHandlers (audioPlayerHandlers) {
+        audioHandlers = audioPlayerHandlers;
+        return this;
+    }
+
+    /**
+     * This is required if you want your skill to run logic after receiving a playback controller request.
+     *
+     * @this {Alexa}
+     * @param {Object} playbackControllerHandlers The custom playback controller callbacks to be executed. In a
+     * dictionary where the name of the request type is the key and the callback is the value.
+     */
+    setPlaybackControllerHandlers (playbackControllerHandlers) {
+        playbackHandlers = playbackControllerHandlers;
+        return this;
+    }
 }
 
 /**
- * Verifies that the request is intended for your service by checking that APP_ID (the application ID from the constructor)
- * is the same as appId (the application ID from exports.handler).
+ * Verifies that the request is intended for your service by checking that APP_ID (the application ID from the
+ * constructor) is the same as appId (the application ID from exports.handler).
  *
  * @param {string} appId The application ID from exports.handler.
  */
@@ -130,6 +157,19 @@ function makeResponse(event, context, session) {
         case Constants.REQUEST_TYPE_SESSION_ENDED:
             onSessionEnded();
             break;
+        case Constants.REQUEST_TYPE_AUDIO_PLAYER_PLAYBACK_STARTED:
+        case Constants.REQUEST_TYPE_AUDIO_PLAYER_PLAYBACK_FINISHED:
+        case Constants.REQUEST_TYPE_AUDIO_PLAYER_PLAYBACK_STOPPED:
+        case Constants.REQUEST_TYPE_AUDIO_PLAYER_PLAYBACK_NEARLY_FINISHED:
+        case Constants.REQUEST_TYPE_AUDIO_PLAYER_PLAYBACK_FAILED:
+            handleAudioPlayerRequest(event);
+            break;
+        case Constants.REQUEST_TYPE_PLAYBACK_CONTROLLER_NEXT_COMMAND_ISSUED:
+        case Constants.REQUEST_TYPE_PLAYBACK_CONTROLLER_PAUSE_COMMAND_ISSUED:
+        case Constants.REQUEST_TYPE_PLAYBACK_CONTROLLER_PLAY_COMMAND_ISSUED:
+        case Constants.REQUEST_TYPE_PLAYBACK_CONTROLLER_PREVIOUS_COMMAND_ISSUED:
+            handlePlaybackControllerRequest(event);
+            break;
         default:
             throw `Request type ${event.request.type} not supported.`;
             break;
@@ -148,6 +188,36 @@ function handleIntent(event, response) {
         callback(response);
     } else {
         throw `Intent ${event.request.intent.name} not supported.`;
+    }
+}
+
+/**
+ * Checks if the audio player request callback function exists and if so, calls it.
+ *
+ * @param {Object} event The event object from exports.handler.
+ * @param {Response} response The response object created in makeResponse.
+ */
+function handleAudioPlayerRequest(event) {
+    let callback = audioHandlers[event.request.type];
+    if (callback) {
+        callback(event);
+    } else {
+        throw `Audio Player request ${event.request.type} not supported.`;
+    }
+}
+
+/**
+ * Checks if the playback controller callback function exists and if so, calls it.
+ *
+ * @param {Object} event The event object from exports.handler.
+ * @param {Response} response The response object created in makeResponse.
+ */
+function handlePlaybackControllerRequest(event) {
+    let callback = playbackHandlers[event.request.type];
+    if (callback) {
+        callback(event);
+    } else {
+        throw `Playback Controller request ${event.request.type} not supported.`;
     }
 }
 
