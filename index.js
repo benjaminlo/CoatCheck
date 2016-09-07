@@ -4,7 +4,7 @@ const Alexa = require('./alexa.js');
 const Constants = require('./constants.js');
 const Speech = require('./speech.js');
 
-const APP_ID = undefined; // replace with "amzn1.echo-sdk.amz-.app.[your-unique-value-here]"
+const APP_ID = ''; // replace with "amzn1.echo-sdk.amz-.app.[your-unique-value-here]"
 
 let onLaunch = (response) => {
     // Put your custom launch logic in here
@@ -22,4 +22,8 @@ let intentHandlers = {
     }
 };
 
-let alexa = new Alexa(APP_ID, exports, onLaunch, intentHandlers, onSessionEnded);
+let alexa = new Alexa(APP_ID)
+    .setLaunchHandler(onLaunch)
+    .setIntentHandlers(intentHandlers)
+    .setSessionEndedHandler(onSessionEnded)
+    .createLambdaConnection(exports); // This has to go last

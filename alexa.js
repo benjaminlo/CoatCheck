@@ -5,9 +5,13 @@ const Response = require('./response.js');
 const Speech = require('./speech.js');
 
 let APP_ID;
-let onLaunch;
+let onLaunch = (response) => {
+    throw 'Unimplemented launch handler.';
+};
 let handlers = {};
-let onSessionEnded;
+let onSessionEnded = () => {
+    throw 'Unimplemented session ended handler.';
+};
 
 /**
  * An Alexa object is used to handle custom intents and requests to an Alexa skill.
@@ -17,18 +21,18 @@ class Alexa {
     /**
      * @this {Alexa}
      * @param {string} appId The ID of the application.
-     * @param {Object} exports The variable to export the Lambda handler to.
-     * @param {function} launchHandler The custom launch callback to be executed.
-     * @param {Object} intentHandlers The custom intent callbacks to be executed.
-     * @param {function} sessionEndedHandler The custom session ended callback to be executed.
      */
-    constructor (appId, exports, launchHandler, intentHandlers, sessionEndedHandler) {
+    constructor (appId) {
         APP_ID = appId;
+    }
 
-        onLaunch = launchHandler;
-        handlers = intentHandlers;
-        onSessionEnded = sessionEndedHandler;
-
+    /**
+     * This is required if you want your skill to listen and send responses on Lambda.
+     *
+     * @this {Alexa}
+     * @param {Object} exports The variable to export the Lambda handler to.
+     */
+    createLambdaConnection (exports) {
         exports.handler = (event, context, callback) => {
             let applicationId;
             let session;
@@ -52,6 +56,40 @@ class Alexa {
                 console.log(err);
             }
         };
+        return this;
+    }
+
+    /**
+     * This is required if you want your skill to reply to the user when they open your skill without a command.
+     *
+     * @this {Alexa}
+     * @param {function} launchHandler The custom launch callback to be executed.
+     */
+    setLaunchHandler (launchHandler) {
+        onLaunch = launchHandler;
+        return this;
+    }
+
+    /**
+     * This is required if you want your skill to reply to the user when they give your skill commands.
+     *
+     * @this {Alexa}
+     * @param {Object} intentHandlers The custom intent callbacks to be executed.
+     */
+    setIntentHandlers (intentHandlers) {
+        handlers = intentHandlers;
+        return this;
+    }
+
+    /**
+     * This is required if you want your skill to run logic after the session has ended.
+     *
+     * @this {Alexa}
+     * @param {function} sessionEndedHandler The custom session ended callback to be executed.
+     */
+    setSessionEndedHandler (sessionEndedHandler) {
+        onSessionEnded = sessionEndedHandler;
+        return this;
     }
 }
 
@@ -62,7 +100,7 @@ class Alexa {
  * @param {string} appId The application ID from exports.handler.
  */
 function validateAppId (appId) {
-    if (APP_ID && APP_ID !== appId) {
+    if (APP_ID && APP_ID !== '' && APP_ID !== appId) {
         console.log(Constants.ERROR_MESSAGE_INVALID_APP_ID_MSG
             + Constants.CONSTANTS_NEW_LINE + Constants.MESSAGE_EXPECTED + APP_ID
             + Constants.CONSTANTS_NEW_LINE + Constants.MESSAGE_ACTUAL + appId);
