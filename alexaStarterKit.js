@@ -45,9 +45,12 @@ class AlexaStarterKit {
                 applicationId = event.context.System.application.applicationId;
             }
 
-            validateAppId(applicationId);
-
-            makeResponse(event, context, session);
+            try {
+                validateAppId(applicationId);
+                makeResponse(event, context, session);
+            } catch (err) {
+                console.log(err);
+            }
         };
     }
 }

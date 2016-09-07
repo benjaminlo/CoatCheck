@@ -19,13 +19,6 @@ let onSessionEnded = () => {
 let intentHandlers = {
     'YourIntent': (response) => {
         response.tell(new Speech(Constants.SPEECH_TYPE_SSML, '<speak>Replace this with your intent response.</speak>'));
-    },
-    'AMAZON.HelpIntent': (response) => {
-        response.ask(new Speech(Constants.SPEECH_TYPE_SSML, '<speak>Replace this with an actual help menu.</speak>'),
-            new Speech(Constants.SPEECH_TYPE_SSML, '<speak>Replace this with reprompt text.</speak>'));
-    },
-    'AMAZON.StopIntent': (response) => {
-        response.tell(new Speech(Constants.SPEECH_TYPE_SSML, '<speak>Replace this with stop message.</speak>'));
     }
 };
 
