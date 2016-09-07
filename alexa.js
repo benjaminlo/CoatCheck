@@ -10,17 +10,17 @@ let handlers = {};
 let onSessionEnded;
 
 /**
- * An AlexaStarterKit object is used to handle custom intents and requests to an Alexa skill.
+ * An Alexa object is used to handle custom intents and requests to an Alexa skill.
  */
-class AlexaStarterKit {
+class Alexa {
 
     /**
-     * @this {AlexaStarterKit}
-     * @param {Object} appId The ID of the application.
+     * @this {Alexa}
+     * @param {string} appId The ID of the application.
      * @param {Object} exports The variable to export the Lambda handler to.
-     * @param {Object} launchHandler The custom launch callback to be executed.
+     * @param {function} launchHandler The custom launch callback to be executed.
      * @param {Object} intentHandlers The custom intent callbacks to be executed.
-     * @param {Object} sessionEndedHandler The custom session ended callback to be executed.
+     * @param {function} sessionEndedHandler The custom session ended callback to be executed.
      */
     constructor (appId, exports, launchHandler, intentHandlers, sessionEndedHandler) {
         APP_ID = appId;
@@ -59,7 +59,7 @@ class AlexaStarterKit {
  * Verifies that the request is intended for your service by checking that APP_ID (the application ID from the constructor)
  * is the same as appId (the application ID from exports.handler).
  *
- * @param {Object} appId The application ID from exports.handler.
+ * @param {string} appId The application ID from exports.handler.
  */
 function validateAppId (appId) {
     if (APP_ID && APP_ID !== appId) {
@@ -113,4 +113,4 @@ function handleIntent(event, response) {
     }
 }
 
-module.exports = AlexaStarterKit;
+module.exports = Alexa;

@@ -1,6 +1,6 @@
 'use strict';
 
-const Alexa = require('./alexaStarterKit.js');
+const Alexa = require('./alexa.js');
 const Constants = require('./constants.js');
 const Speech = require('./speech.js');
 
