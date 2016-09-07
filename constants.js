@@ -19,5 +19,16 @@ module.exports = {
 
     REQUEST_TYPE_LAUNCH: 'LaunchRequest',
     REQUEST_TYPE_INTENT: 'IntentRequest',
-    REQUEST_TYPE_SESSION_ENDED: 'SessionEndedRequest'
+    REQUEST_TYPE_SESSION_ENDED: 'SessionEndedRequest',
+
+    REQUEST_TYPE_AUDIO_PLAYER_PLAYBACK_STARTED: 'AudioPlayer.PlaybackStarted',
+    REQUEST_TYPE_AUDIO_PLAYER_PLAYBACK_FINISHED: 'AudioPlayer.PlaybackFinished',
+    REQUEST_TYPE_AUDIO_PLAYER_PLAYBACK_STOPPED: 'AudioPlayer.PlaybackStopped',
+    REQUEST_TYPE_AUDIO_PLAYER_PLAYBACK_NEARLY_FINISHED: 'AudioPlayer.NearlyFinished',
+    REQUEST_TYPE_AUDIO_PLAYER_PLAYBACK_FAILED: 'AudioPlayer.PlaybackFailed',
+
+    REQUEST_TYPE_PLAYBACK_CONTROLLER_NEXT_COMMAND_ISSUED: 'PlaybackController.NextCommandIssued',
+    REQUEST_TYPE_PLAYBACK_CONTROLLER_PAUSE_COMMAND_ISSUED: 'PlaybackController.PauseCommandIssued',
+    REQUEST_TYPE_PLAYBACK_CONTROLLER_PLAY_COMMAND_ISSUED: 'PlaybackController.PlayCommandIssued',
+    REQUEST_TYPE_PLAYBACK_CONTROLLER_PREVIOUS_COMMAND_ISSUED: 'PlaybackController.PreviousCommandIssued'
 };
