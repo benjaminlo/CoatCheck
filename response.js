@@ -44,8 +44,8 @@ class Response {
      * @param {Object} session The session passed in from Alexa.
      */
     constructor (context, session) {
-        this._context = context;
-        this._session = session;
+        this.context = context;
+        this.session = session;
     }
 
     /**
@@ -64,7 +64,7 @@ class Response {
             throw Constants.ERROR_MESSAGE_INVALID_TYPE;
         }
 
-        this._context.succeed(buildSpeechletResponse({
+        this.context.succeed(buildSpeechletResponse({
             speech,
             reprompt: repromptSpeech,
             shouldEndSession: false
@@ -89,7 +89,7 @@ class Response {
             throw Constants.ERROR_MESSAGE_INVALID_TYPE;
         }
 
-        this._context.succeed(buildSpeechletResponse({
+        this.context.succeed(buildSpeechletResponse({
             speech,
             reprompt: repromptSpeech,
             card,
@@ -109,7 +109,7 @@ class Response {
             throw Constants.ERROR_MESSAGE_INVALID_TYPE;
         }
 
-        this._context.succeed(buildSpeechletResponse({
+        this.context.succeed(buildSpeechletResponse({
             speech,
             shouldEndSession: true
         }));
@@ -129,7 +129,7 @@ class Response {
             throw Constants.ERROR_MESSAGE_INVALID_TYPE;
         }
 
-        this._context.succeed(buildSpeechletResponse({
+        this.context.succeed(buildSpeechletResponse({
             speech,
             card,
             shouldEndSession: true
