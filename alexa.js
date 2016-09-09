@@ -177,7 +177,7 @@ function makeResponse(event, context, session) {
         case Constants.REQUEST_TYPE_PLAYBACK_CONTROLLER_PAUSE_COMMAND_ISSUED:
         case Constants.REQUEST_TYPE_PLAYBACK_CONTROLLER_PLAY_COMMAND_ISSUED:
         case Constants.REQUEST_TYPE_PLAYBACK_CONTROLLER_PREVIOUS_COMMAND_ISSUED:
-            handlePlaybackControllerRequest(event);
+            handlePlaybackControllerRequest(event, context, session);
             break;
         default:
             throw `Request type ${event.request.type} not supported.`;
@@ -247,16 +247,16 @@ function handleAudioPlayerRequestWithStopOrClear(event, context, session) {
         throw `Audio Player request ${event.request.type} not supported.`;
     }
 
-    let directives = response._directives.filter((directive) => {
+    response._directives = response._directives.filter((directive) => {
         return directive.type === Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_STOP ||
             directive.type === Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_CLEAR_QUEUE;
     });
 
-    delete response.speech;
-    delete response.reprompt;
-    delete response.card;
+    response.removeSpeech();
+    response.removeReprompt();
+    response.removeCard();
 
-    context.succeed(response);
+    context.succeed(response._response);
 }
 
 /**
@@ -292,11 +292,11 @@ function handleAudioPlayerRequest(event, context, session) {
         throw `Audio Player request ${event.request.type} not supported.`;
     }
 
-    delete response.speech;
-    delete response.reprompt;
-    delete response.card;
+    response.removeSpeech();
+    response.removeReprompt();
+    response.removeCard();
 
-    context.succeed(response);
+    context.succeed(response._response);
 }
 
 /**

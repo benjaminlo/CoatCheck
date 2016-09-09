@@ -153,6 +153,18 @@ class Response {
 
         this._directives.push(directive);
     }
+
+    removeSpeech() {
+        delete this._response.speech;
+    }
+
+    removeReprompt() {
+        delete this._response.reprompt;
+    }
+
+    removeCard() {
+        delete this._response.card;
+    }
 }
 
 module.exports = Response;

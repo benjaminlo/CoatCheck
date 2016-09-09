@@ -14,7 +14,7 @@ module.exports = {
     ERROR_MESSAGE_INVALID_TYPE_URL: 'Invalid Type URL must be a string.',
     ERROR_MESSAGE_INVALID_TYPE_TOKEN: 'Invalid Type Token must be a string.',
     ERROR_MESSAGE_INVALID_TYPE_EXPECTED_PREVIOUS_TOKEN: 'Invalid Type Expected previous token must be a string.',
-    ERROR_MESSAGE_INVALID_TYPE_OFFSET_IN_MILLISECONDS: 'Offset in milliseconds must be a number.',
+    ERROR_MESSAGE_INVALID_TYPE_OFFSET_IN_MILLISECONDS: 'Invalid Type Offset in milliseconds must be a number.',
 
     ERROR_MESSAGE_INVALID_CLEAR_BEHAVIOR: 'Invalid Type Clear Behavior must be Constants.CLEAR_BEHAVIOR_ENQUEUED or Constants.CLEAR_BEHAVIOR_ALL.',
 
