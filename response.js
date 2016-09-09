@@ -153,6 +153,52 @@ class Response {
 
         this._directives.push(directive);
     }
+
+    filterDirectives(validDirectives) {
+        if (validDirectives.constructor !== Array) {
+            throw Constants.ERROR_MESSAGE_INVALID_TYPE_FILTER_DIRECTIVES;
+        }
+
+        let didFindPlay = false;
+        let didFindStop = false;
+        let didFindClearQueue = false;
+
+        this._directives.filter((directive) => {
+            let isValid = false;
+
+            validDirectives.forEach(check => {
+                if (check === directive.type) {
+
+                    if (directive.type === Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_PLAY && !didFindPlay) {
+                        didFindPlay = true;
+                        isValid = true;
+                    } else if (directive.type === Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_STOP && !didFindStop) {
+                        didFindStop = true;
+                        isValid = true;
+                    } else if (directive.type === Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_CLEAR_QUEUE && !didFindClearQueue) {
+                        didFindClearQueue = true;
+                        isValid = true;
+                    }
+
+                    isValid = true;
+                }
+            });
+
+            return isValid;
+        });
+    }
+
+    removeSpeech() {
+        delete this._response.speech;
+    }
+
+    removeReprompt() {
+        delete this._response.reprompt;
+    }
+
+    removeCard() {
+        delete this._response.card;
+    }
 }
 
 module.exports = Response;
