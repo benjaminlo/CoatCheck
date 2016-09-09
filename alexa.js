@@ -194,6 +194,13 @@ function makeResponse(event, context, session) {
  */
 function handleLaunch(event, context, session) {
     let response = onLaunch(new Response(), event, context, session);
+
+    response.filterDirectives([
+        Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_PLAY,
+        Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_STOP,
+        Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_CLEAR_QUEUE
+    ]);
+
     context.succeed(response);
 }
 
@@ -214,7 +221,13 @@ function handleIntent(event, context, session) {
         throw `Intent ${event.request.intent.name} not supported.`;
     }
 
-    context.succeed(response);
+    response.filterDirectives([
+        Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_PLAY,
+        Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_STOP,
+        Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_CLEAR_QUEUE
+    ]);
+
+    context.succeed(response._response);
 }
 
 /**
@@ -247,11 +260,10 @@ function handleAudioPlayerRequestWithStopOrClear(event, context, session) {
         throw `Audio Player request ${event.request.type} not supported.`;
     }
 
-    response._directives = response._directives.filter((directive) => {
-        return directive.type === Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_STOP ||
-            directive.type === Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_CLEAR_QUEUE;
-    });
-
+    response.filterDirectives([
+        Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_STOP,
+        Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_CLEAR_QUEUE
+    ]);
     response.removeSpeech();
     response.removeReprompt();
     response.removeCard();
@@ -292,6 +304,11 @@ function handleAudioPlayerRequest(event, context, session) {
         throw `Audio Player request ${event.request.type} not supported.`;
     }
 
+    response.filterDirectives([
+        Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_PLAY,
+        Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_STOP,
+        Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_CLEAR_QUEUE
+    ]);
     response.removeSpeech();
     response.removeReprompt();
     response.removeCard();

@@ -10,6 +10,9 @@ module.exports = {
     ERROR_MESSAGE_INVALID_APP_ID: 'Invalid Application ID',
     ERROR_MESSAGE_INVALID_APP_ID_MSG: 'The Application IDs do not match.',
 
+
+    ERROR_MESSAGE_INVALID_TYPE_FILTER_DIRECTIVES: 'Invalid Type Filter directives expects an Array.',
+
     ERROR_MESSAGE_INVALID_PLAY_BEHAVIOR: 'Invalid Type Play Behavior must be Constants.PLAY_BEHAVIOR_REPLACE_ALL or Constants.PLAY_BEHAVIOR_ENQUEUE or Constants.PLAY_BEHAVIOR_REPLACE_ENQUEUED.',
     ERROR_MESSAGE_INVALID_TYPE_URL: 'Invalid Type URL must be a string.',
     ERROR_MESSAGE_INVALID_TYPE_TOKEN: 'Invalid Type Token must be a string.',
