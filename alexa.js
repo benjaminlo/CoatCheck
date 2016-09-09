@@ -317,17 +317,27 @@ function handleAudioPlayerRequest(event, context, session) {
 }
 
 /**
- * Checks if the playback controller callback function exists and if so, calls it.
+ * Checks if the playback controller callback function exists and if so, calls it. Then it removes any invalid
+ * speech properties, reprompt properties, or card properties. Finally it sends the response back to the skill.
  *
  * @param {Object} event The event object from exports.handler.
+ * @param {Object} context The context passed in from Alexa.
+ * @param {Object} session The session passed in from Alexa.
  */
-function handlePlaybackControllerRequest(event) {
+function handlePlaybackControllerRequest(event, context, session) {
+    let response = new Response();
     let callback = playbackHandlers[event.request.type];
     if (callback) {
-        callback(event, directive);
+        response = callback(response, event, context, session);
     } else {
         throw `Playback Controller request ${event.request.type} not supported.`;
     }
+
+    response.removeSpeech();
+    response.removeReprompt();
+    response.removeCard();
+
+    context.succeed(response._response);
 }
 
 module.exports = Alexa;
