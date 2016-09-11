@@ -131,6 +131,7 @@ class Alexa {
  * Verifies that the request is intended for your service by checking that APP_ID (the application ID from the
  * constructor) is the same as appId (the application ID from exports.handler).
  *
+ * @private
  * @param {string} appId The application ID from exports.handler.
  */
 function validateAppId (appId) {
@@ -147,6 +148,7 @@ function validateAppId (appId) {
  * Responds to a request made to an Alexa skill based on the request type (LaunchRequest, IntentRequest, and
  * SessionEndedRequest required).
  *
+ * @private
  * @param {Object} event The event object from exports.handler.
  * @param {Object} context The context passed in from Alexa.
  * @param {Object} session The session passed in from Alexa.
@@ -188,6 +190,7 @@ function makeResponse(event, context, session) {
 /**
  * Wraps launch event callback.
  *
+ * @private
  * @param {Object} event The event object from exports.handler.
  * @param {Object} context The context passed in from Alexa.
  * @param {Object} session The session passed in from Alexa.
@@ -207,6 +210,7 @@ function handleLaunch(event, context, session) {
 /**
  * Checks if the custom intent callback function exists and if so, calls it.
  *
+ * @private
  * @param {Object} event The event object from exports.handler.
  * @param {Object} context The context passed in from Alexa.
  * @param {Object} session The session passed in from Alexa.
@@ -233,6 +237,7 @@ function handleIntent(event, context, session) {
 /**
  * Wraps session ended event callback.
  *
+ * @private
  * @param {Object} event The event object from exports.handler.
  * @param {Object} context The context passed in from Alexa.
  * @param {Object} session The session passed in from Alexa.
@@ -246,6 +251,7 @@ function handleSessionEnded(event, context, session) {
  * directives, speech properties, reprompt properties, or card properties. Finally it sends the response back to the
  * skill.
  *
+ * @private
  * @param {Object} event The event object from exports.handler.
  * @param {Object} context The context passed in from Alexa.
  * @param {Object} session The session passed in from Alexa.
@@ -274,6 +280,7 @@ function handleAudioPlayerRequestWithStopOrClear(event, context, session) {
 /**
  * Checks if the audio player request callback function exists and if so, calls it. This makes no response to the skill.
  *
+ * @private
  * @param {Object} event The event object from exports.handler.
  * @param {Object} context The context passed in from Alexa.
  * @param {Object} session The session passed in from Alexa.
@@ -291,6 +298,7 @@ function handleAudioPlayerRequestWithNoResponse(event, context, session) {
  * Checks if the audio player request callback function exists and if so, calls it. Then it removes any invalid
  * speech properties, reprompt properties, or card properties. Finally it sends the response back to the skill.
  *
+ * @private
  * @param {Object} event The event object from exports.handler.
  * @param {Object} context The context passed in from Alexa.
  * @param {Object} session The session passed in from Alexa.
@@ -320,6 +328,7 @@ function handleAudioPlayerRequest(event, context, session) {
  * Checks if the playback controller callback function exists and if so, calls it. Then it removes any invalid
  * speech properties, reprompt properties, or card properties. Finally it sends the response back to the skill.
  *
+ * @private
  * @param {Object} event The event object from exports.handler.
  * @param {Object} context The context passed in from Alexa.
  * @param {Object} session The session passed in from Alexa.
