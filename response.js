@@ -154,6 +154,14 @@ class Response {
         this._directives.push(directive);
     }
 
+    /**
+     * Removes all the invalid directives. A {Directive} is valid only if it is the only one of its type, and if it is
+     * passed in as this method's parameter.
+     *
+     * @param {Array} validDirectives The list of {Directive} types that are valid. This can either be
+     * {@link Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_PLAY}, {@link Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_STOP}, or
+     * {@link Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_CLEAR_QUEUE}. Any Directives of any other type will be removed.
+     */
     filterDirectives(validDirectives) {
         if (validDirectives.constructor !== Array) {
             throw Constants.ERROR_MESSAGE_INVALID_TYPE_FILTER_DIRECTIVES;
@@ -188,14 +196,23 @@ class Response {
         });
     }
 
+    /**
+     * Removes the speechlet response.
+     */
     removeSpeech() {
         delete this._response.speech;
     }
 
+    /**
+     * Removes the reprompt speechlet response.
+     */
     removeReprompt() {
         delete this._response.reprompt;
     }
 
+    /**
+     * Removes the card response.
+     */
     removeCard() {
         delete this._response.card;
     }
