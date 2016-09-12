@@ -1,9 +1,7 @@
 'use strict';
 
 const Constants = require('./constants.js');
-const Directive = require('./directive.js');
 const Response = require('./response.js');
-const Speech = require('./speech.js');
 
 let APP_ID;
 let onLaunch = (response, event, context, session) => {
