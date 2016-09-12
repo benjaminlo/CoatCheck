@@ -171,12 +171,11 @@ class Response {
         let didFindStop = false;
         let didFindClearQueue = false;
 
-        this._directives.filter((directive) => {
+        this._directives = this._directives.filter((directive) => {
             let isValid = false;
 
             validDirectives.forEach(check => {
                 if (check === directive.type) {
-
                     if (directive.type === Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_PLAY && !didFindPlay) {
                         didFindPlay = true;
                         isValid = true;
@@ -187,8 +186,6 @@ class Response {
                         didFindClearQueue = true;
                         isValid = true;
                     }
-
-                    isValid = true;
                 }
             });
 
