@@ -1,8 +1,8 @@
 'use strict';
 
-const Alexa = require('./alexa.js');
-const Constants = require('./constants.js');
-const Speech = require('./speech.js');
+const Alexa = require('./alexa/alexa.js');
+const Constants = require('./alexa/constants.js');
+const Speech = require('./alexa/speech.js');
 
 const APP_ID = ''; // replace with "amzn1.echo-sdk.amz-.app.[your-unique-value-here]"
 

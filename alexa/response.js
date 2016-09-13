@@ -44,7 +44,7 @@ class Response {
     /**
      * @this {Response}
      */
-    constructor() {
+    constructor () {
         this._response = {
             shouldEndSession: true
         };
@@ -61,7 +61,7 @@ class Response {
      * @param {Speech} repromptSpeech The speech object that will be sent to the skill as the reprompt text-to-speech
      * audio.
      */
-    ask(speech, repromptSpeech) {
+    ask (speech, repromptSpeech) {
         if (!(speech instanceof Speech) || !(repromptSpeech instanceof Speech)) {
             throw Constants.ERROR_MESSAGE_INVALID_TYPE;
         }
@@ -85,7 +85,7 @@ class Response {
      * audio.
      * @param {Card} card The card object that will be sent to the skill.
      */
-    askWithCard(speech, repromptSpeech, card) {
+    askWithCard (speech, repromptSpeech, card) {
         if (!(speech instanceof Speech) || !(repromptSpeech instanceof Speech)) {
             throw Constants.ERROR_MESSAGE_INVALID_TYPE;
         }
@@ -106,7 +106,7 @@ class Response {
      * @this {Response}
      * @param {Speech} speech The speech object that will be sent to the skill.
      */
-    tell(speech) {
+    tell (speech) {
         if (!(speech instanceof Speech)) {
             throw Constants.ERROR_MESSAGE_INVALID_TYPE;
         }
@@ -127,7 +127,7 @@ class Response {
      * @param {Speech} speech The speech object that will be sent to the skill.
      * @param {Card} card The card object that will be sent to the skill.
      */
-    tellWithCard(speech, card) {
+    tellWithCard (speech, card) {
         if (!(speech instanceof Speech) || !(card instanceof Card)) {
             throw Constants.ERROR_MESSAGE_INVALID_TYPE;
         }
@@ -146,7 +146,7 @@ class Response {
      * @this {Response}
      * @param {Directive} directive The directive to add to the Response object.
      */
-    addDirective(directive) {
+    addDirective (directive) {
         if (!(directive instanceof Directive)) {
             throw Constants.ERROR_MESSAGE_INVALID_TYPE;
         }
@@ -154,7 +154,15 @@ class Response {
         this._directives.push(directive);
     }
 
-    filterDirectives(validDirectives) {
+    /**
+     * Removes all the invalid directives. A {Directive} is valid only if it is the only one of its type, and if it is
+     * passed in as this method's parameter.
+     *
+     * @param {Array} validDirectives The list of {Directive} types that are valid. This can either be
+     * {@link Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_PLAY}, {@link Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_STOP}, or
+     * {@link Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_CLEAR_QUEUE}. Any Directives of any other type will be removed.
+     */
+    filterDirectives (validDirectives) {
         if (validDirectives.constructor !== Array) {
             throw Constants.ERROR_MESSAGE_INVALID_TYPE_FILTER_DIRECTIVES;
         }
@@ -163,12 +171,11 @@ class Response {
         let didFindStop = false;
         let didFindClearQueue = false;
 
-        this._directives.filter((directive) => {
+        this._directives = this._directives.filter((directive) => {
             let isValid = false;
 
             validDirectives.forEach(check => {
                 if (check === directive.type) {
-
                     if (directive.type === Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_PLAY && !didFindPlay) {
                         didFindPlay = true;
                         isValid = true;
@@ -179,8 +186,6 @@ class Response {
                         didFindClearQueue = true;
                         isValid = true;
                     }
-
-                    isValid = true;
                 }
             });
 
@@ -188,15 +193,24 @@ class Response {
         });
     }
 
-    removeSpeech() {
+    /**
+     * Removes the speechlet response.
+     */
+    removeSpeech () {
         delete this._response.speech;
     }
 
-    removeReprompt() {
+    /**
+     * Removes the reprompt speechlet response.
+     */
+    removeReprompt () {
         delete this._response.reprompt;
     }
 
-    removeCard() {
+    /**
+     * Removes the card response.
+     */
+    removeCard () {
         delete this._response.card;
     }
 }
