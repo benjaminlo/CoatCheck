@@ -46,7 +46,10 @@ class Response {
      */
     constructor () {
         this._response = {
-            shouldEndSession: true
+            version: Constants.VERSION_NUMBER,
+            response: {
+                shouldEndSession: true
+            }
         };
         this._directives = [];
     }
