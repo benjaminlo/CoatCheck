@@ -6,10 +6,12 @@
   "main": "index.js",
   "dependencies": {},
   "devDependencies": {
+    "jsdoc": "^3.4.1",
     "mocha": "^3.0.2"
   },
   "scripts": {
-    "test": "./node_modules/mocha/bin/mocha --reporter nyan test/"
+    "test": "./node_modules/mocha/bin/mocha --reporter nyan test/",
+    "docs": "./node_modules/jsdoc/jsdoc.js -c jsdoc-conf.json"
   },
   "author": "TribalScale",
   "license": "ISC"

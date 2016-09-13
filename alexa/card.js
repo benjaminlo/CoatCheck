@@ -5,6 +5,9 @@ const Constants = require('./constants.js');
 /**
  * A Card object is used to create a valid JSON object that will be used to tell
  * Alexa to respond with a card object in the companion app.
+ *
+ * @example
+ * let card = new Card('Today's Weather Report', 'Sunny!');
  */
 class Card {
 
