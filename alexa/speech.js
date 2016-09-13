@@ -19,7 +19,7 @@ class Speech {
      * {@link Constants.SPEECH_TYPE_SSML}, then be sure to use valid SSML formatting including the surrounding
      * <code>&lt;speak&gt;</code> and <code>&lt;/speak&gt;</code> tags.
      */
-    constructor (type, text) {
+    constructor(type, text) {
         switch (type) {
             case Constants.SPEECH_TYPE_SSML:
                 this.ssml = text;

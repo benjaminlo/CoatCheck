@@ -2,7 +2,7 @@
 
 module.exports = {
     VERSION_NUMBER: '1.0',
-    
+
     SPEECH_TYPE_TEXT: 'PlainText',
     SPEECH_TYPE_SSML: 'SSML',
 

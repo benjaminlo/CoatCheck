@@ -5,7 +5,7 @@ const Directive = require('./directive.js');
 const Speech = require('./speech.js');
 const Card = require('./card.js');
 
-function buildSpeechletResponse (options) {
+function buildSpeechletResponse(options) {
     let response = {
         shouldEndSession: options.shouldEndSession
     };
@@ -44,7 +44,7 @@ class Response {
     /**
      * @this Response
      */
-    constructor () {
+    constructor() {
         this._response = {
             version: Constants.VERSION_NUMBER,
             response: {
@@ -71,7 +71,7 @@ class Response {
      * @param {Speech} repromptSpeech The speech object that will be sent to the skill as the reprompt text-to-speech
      * audio.
      */
-    ask (speech, repromptSpeech) {
+    ask(speech, repromptSpeech) {
         if (!(speech instanceof Speech) || !(repromptSpeech instanceof Speech)) {
             throw Constants.ERROR_MESSAGE_INVALID_TYPE;
         }
@@ -102,7 +102,7 @@ class Response {
      * audio.
      * @param {Card} card The card object that will be sent to the skill.
      */
-    askWithCard (speech, repromptSpeech, card) {
+    askWithCard(speech, repromptSpeech, card) {
         if (!(speech instanceof Speech) || !(repromptSpeech instanceof Speech)) {
             throw Constants.ERROR_MESSAGE_INVALID_TYPE;
         }
@@ -128,7 +128,7 @@ class Response {
      * @this Response
      * @param {Speech} speech The speech object that will be sent to the skill.
      */
-    tell (speech) {
+    tell(speech) {
         if (!(speech instanceof Speech)) {
             throw Constants.ERROR_MESSAGE_INVALID_TYPE;
         }
@@ -155,7 +155,7 @@ class Response {
      * @param {Speech} speech The speech object that will be sent to the skill.
      * @param {Card} card The card object that will be sent to the skill.
      */
-    tellWithCard (speech, card) {
+    tellWithCard(speech, card) {
         if (!(speech instanceof Speech) || !(card instanceof Card)) {
             throw Constants.ERROR_MESSAGE_INVALID_TYPE;
         }
@@ -178,7 +178,7 @@ class Response {
      * @this Response
      * @param {Directive} directive The directive to add to the Response object.
      */
-    addDirective (directive) {
+    addDirective(directive) {
         if (!(directive instanceof Directive)) {
             throw Constants.ERROR_MESSAGE_INVALID_TYPE;
         }
@@ -194,7 +194,7 @@ class Response {
      * {@link Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_PLAY}, {@link Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_STOP}, or
      * {@link Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_CLEAR_QUEUE}. Any Directives of any other type will be removed.
      */
-    filterDirectives (validDirectives) {
+    filterDirectives(validDirectives) {
         if (validDirectives.constructor !== Array) {
             throw Constants.ERROR_MESSAGE_INVALID_TYPE_FILTER_DIRECTIVES;
         }
@@ -228,21 +228,21 @@ class Response {
     /**
      * Removes the speechlet response.
      */
-    removeSpeech () {
+    removeSpeech() {
         delete this._response.speech;
     }
 
     /**
      * Removes the reprompt speechlet response.
      */
-    removeReprompt () {
+    removeReprompt() {
         delete this._response.reprompt;
     }
 
     /**
      * Removes the card response.
      */
-    removeCard () {
+    removeCard() {
         delete this._response.card;
     }
 }

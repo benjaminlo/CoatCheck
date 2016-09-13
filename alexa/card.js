@@ -16,7 +16,7 @@ class Card {
      * @param {String} title The title to display on the card.
      * @param {String} text The text to display on the card.
      */
-    constructor (title, text) {
+    constructor(title, text) {
         this.type = Constants.CARD_TYPE_SIMPLE;
         this.title = title;
         this.content = text;
