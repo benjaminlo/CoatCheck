@@ -14,7 +14,7 @@ class Directive {
      * @this Directive
      * @param {Object} context The context passed in from Alexa.
      */
-    constructor (context) {
+    constructor(context) {
         this.context = context;
     }
 
@@ -31,7 +31,7 @@ class Directive {
      * @param {number} offsetInMilliseconds The offset in milliseconds in the stream from which Alexa should begin
      * playback.
      */
-    setTypeToPlay (playBehavior, url, token, expectedPreviousToken, offsetInMilliseconds) {
+    setTypeToPlay(playBehavior, url, token, expectedPreviousToken, offsetInMilliseconds) {
         this.type = Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_PLAY;
         if (playBehavior === Constants.PLAY_BEHAVIOR_REPLACE_ALL ||
             playBehavior === Constants.PLAY_BEHAVIOR_ENQUEUE ||
@@ -65,7 +65,7 @@ class Directive {
      *
      * @this Directive
      */
-    setTypeToStop () {
+    setTypeToStop() {
         this.type = Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_STOP;
     }
 
@@ -76,7 +76,7 @@ class Directive {
      * @param {string} clearBehavior The clearBehavior must be Constants.CLEAR_BEHAVIOR_ENQUEUED or
      * Constants.CLEAR_BEHAVIOR_ALL.
      */
-    setTypeToClearQueue (clearBehavior) {
+    setTypeToClearQueue(clearBehavior) {
         this.type = Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_CLEAR_QUEUE;
         if (clearBehavior === Constants.CLEAR_BEHAVIOR_ENQUEUED || clearBehavior === Constants.CLEAR_BEHAVIOR_ALL) {
             this.clearBehavior = clearBehavior;
@@ -91,7 +91,7 @@ class Directive {
      * @this Directive
      * @returns {Object} directive The directive to add to the Response object.
      */
-    parse () {
+    parse() {
         let directive = {};
         directive[Constants.DIRECTIVE_PROPERTY_TYPE] = this.type;
 

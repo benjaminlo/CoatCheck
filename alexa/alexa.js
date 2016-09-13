@@ -23,7 +23,7 @@ class Alexa {
      * @this Alexa
      * @param {string} appId The Application ID that you can find on the Alexa Skill dashboard in the following format: <code>'amzn1.echo-sdk.amz-.app.[your-unique-value-here]'</code>.
      */
-    constructor (appId) {
+    constructor(appId) {
         APP_ID = appId;
     }
 
@@ -34,7 +34,7 @@ class Alexa {
      * @param {Object} exports The variable to export the Lambda handler to.
      * @returns {Alexa} Returns itself to allow method chaining.
      */
-    createLambdaConnection (exports) {
+    createLambdaConnection(exports) {
         exports.handler = (event, context, callback) => {
             let applicationId;
             let session;
@@ -81,7 +81,7 @@ class Alexa {
      * @param {function} launchHandler The custom launch callback to be executed.
      * @returns {Alexa} Returns itself to allow method chaining.
      */
-    setLaunchHandler (launchHandler) {
+    setLaunchHandler(launchHandler) {
         onLaunch = launchHandler;
         return this;
     }
@@ -108,7 +108,7 @@ class Alexa {
      * intent is the key and the callback is the value.
      * @returns {Alexa} Returns itself to allow method chaining.
      */
-    setIntentHandlers (intentHandlers) {
+    setIntentHandlers(intentHandlers) {
         handlers = intentHandlers;
         return this;
     }
@@ -129,7 +129,7 @@ class Alexa {
      * @param {function} sessionEndedHandler The custom session ended callback to be executed.
      * @returns {Alexa} Returns itself to allow method chaining.
      */
-    setSessionEndedHandler (sessionEndedHandler) {
+    setSessionEndedHandler(sessionEndedHandler) {
         onSessionEnded = sessionEndedHandler;
         return this;
     }
@@ -164,7 +164,7 @@ class Alexa {
      * name of the request type is the key and the callback is the value.
      * @returns {Alexa} Returns itself to allow method chaining.
      */
-    setAudioPlayerHandlers (audioPlayerHandlers) {
+    setAudioPlayerHandlers(audioPlayerHandlers) {
         audioHandlers = audioPlayerHandlers;
         return this;
     }
@@ -177,7 +177,7 @@ class Alexa {
      * dictionary where the name of the request type is the key and the callback is the value.
      * @returns {Alexa} Returns itself to allow method chaining.
      */
-    setPlaybackControllerHandlers (playbackControllerHandlers) {
+    setPlaybackControllerHandlers(playbackControllerHandlers) {
         playbackHandlers = playbackControllerHandlers;
         return this;
     }
@@ -190,7 +190,7 @@ class Alexa {
  * @private
  * @param {string} appId The application ID from exports.handler.
  */
-function validateAppId (appId) {
+function validateAppId(appId) {
     if (APP_ID && APP_ID !== '' && APP_ID !== appId) {
         console.log(Constants.ERROR_MESSAGE_INVALID_APP_ID_MSG
             + Constants.CONSTANTS_NEW_LINE + Constants.MESSAGE_EXPECTED + APP_ID
