@@ -20,8 +20,8 @@ let onSessionEnded = (event, context, session) => {
 class Alexa {
 
     /**
-     * @this {Alexa}
-     * @param {string} appId The ID of the application.
+     * @this Alexa
+     * @param {string} appId The Application ID that you can find on the Alexa Skill dashboard in the following format: <code>'amzn1.echo-sdk.amz-.app.[your-unique-value-here]'</code>.
      */
     constructor (appId) {
         APP_ID = appId;
@@ -30,7 +30,7 @@ class Alexa {
     /**
      * This is required if you want your skill to listen and send responses on Lambda.
      *
-     * @this {Alexa}
+     * @this Alexa
      * @param {Object} exports The variable to export the Lambda handler to.
      * @returns {Alexa} Returns itself to allow method chaining.
      */
@@ -62,9 +62,22 @@ class Alexa {
     }
 
     /**
-     * This is required if you want your skill to reply to the user when they open your skill without a command.
+     * The custom launch callback to be executed is passed to this method. This is required if you want your skill to
+     * reply to the user when they open your skill without a command.
+     * <br />
+     * The launch callback will run when the skill launches without a command.
+     * It will be provided a {@link Response} object that you can use to respond to the user, as well as an event,
+     * context, and session so that your skill can grab data from them.
      *
-     * @this {Alexa}
+     * @example
+     * let launchHandler = (response, event, context, session) => {
+     *   response.ask(new Speech(Constants.SPEECH_TYPE_SSML, '<speak>Replace this with a launch menu.</speak>'),
+     *   new Speech(Constants.SPEECH_TYPE_SSML, '<speak>Replace this with reprompt text.</speak>'));
+     * }
+     *
+     * setLaunchHandler (launchHandler);
+     *
+     * @this Alexa
      * @param {function} launchHandler The custom launch callback to be executed.
      * @returns {Alexa} Returns itself to allow method chaining.
      */
@@ -74,9 +87,23 @@ class Alexa {
     }
 
     /**
-     * This is required if you want your skill to reply to the user when they give your skill commands.
+     * The custom intent callbacks to be executed are passed to this method. This is required if you want your skill to
+     * reply to the user when they give your skill commands.
+     * <br />
+     * The intent callbacks parameter should be a JavaScript object where the keys are mapped to the names of Intents
+     * that your skill should implement (as defined in your Intent Schema) and the values are the callback functions
+     * that will run on those intents. Each function will be provided a {@link Response} object that you can use to
+     * respond to the user, as well as an event, context, and session so that your skill can grab data from them.
      *
-     * @this {Alexa}
+     * @example
+     * let intentHandlers = {
+     *   'YourIntent': (response, event, context, session) => {
+     *      response.tell(new Speech(Constants.SPEECH_TYPE_SSML, '<speak>Replace this with your intent response.</speak>'));
+     * };
+     *
+     * setIntentHandlers (intentHandlers)
+     *
+     * @this Alexa
      * @param {Object} intentHandlers The custom intent callbacks to be executed. In a dictionary where the name of the
      * intent is the key and the callback is the value.
      * @returns {Alexa} Returns itself to allow method chaining.
@@ -87,9 +114,18 @@ class Alexa {
     }
 
     /**
-     * This is required if you want your skill to run logic after the session has ended.
+     * Setes the callback that will run when the skill ends a session. This is required if you want your skill to run
+     * logic after the session has ended. This callback will be provided an event, context, and session is so that your
+     * skill can grab data from them.
      *
-     * @this {Alexa}
+     * @example
+     * let onSessionEnded = (event, context, session) => {
+     *   // Put your custom session ended logic in here
+     * };
+     *
+     * setSessionEndedHandler(onSessionEnded);
+     *
+     * @this Alexa
      * @param {function} sessionEndedHandler The custom session ended callback to be executed.
      * @returns {Alexa} Returns itself to allow method chaining.
      */
@@ -99,9 +135,31 @@ class Alexa {
     }
 
     /**
-     * This is required if you want your skill to run logic after receiving an audio player request.
+     * This is required if you want your skill to run logic after receiving an audio player request. This is optional
+     * and can be removed if you are not using the Audio Player. It takes a JavaScript object where the key is mapped to
+     * the name of the request type, and the value is mapped to the callbacks to be exceuted.
      *
-     * @this {Alexa}
+     * @example
+     * let audioPlayerHandlers = {};
+     * audioPlayerHandlers[Constants.REQUEST_TYPE_AUDIO_PLAYER_PLAYBACK_STARTED] = (event, context, session) => {
+     *   // do stuff
+     * };
+     * audioPlayerHandlers[Constants.REQUEST_TYPE_AUDIO_PLAYER_PLAYBACK_FAILED] = (event, context, session) => {
+     *   // do stuff
+     * };
+     * audioPlayerHandlers[Constants.REQUEST_TYPE_AUDIO_PLAYER_PLAYBACK_STOPPED] = (event, context, session) => {
+     *   // do stuff
+     * };
+     * * audioPlayerHandlers[Constants.REQUEST_TYPE_AUDIO_PLAYER_PLAYBACK_NEARLY_FINISHED] = (event, context, session) => {
+     *   // do stuff
+     * };
+     * audioPlayerHandlers[Constants.REQUEST_TYPE_AUDIO_PLAYER_PLAYBACK_FAILED] = (event, context, session) => {
+     *   // do stuff
+     * };
+     *
+     * setAudioPlayerHandlers(audioPlayerHandlers);
+     *
+     * @this Alexa
      * @param {Object} audioPlayerHandlers The custom audio player callbacks to be executed. In a dictionary where the
      * name of the request type is the key and the callback is the value.
      * @returns {Alexa} Returns itself to allow method chaining.
@@ -114,7 +172,7 @@ class Alexa {
     /**
      * This is required if you want your skill to run logic after receiving a playback controller request.
      *
-     * @this {Alexa}
+     * @this Alexa
      * @param {Object} playbackControllerHandlers The custom playback controller callbacks to be executed. In a
      * dictionary where the name of the request type is the key and the callback is the value.
      * @returns {Alexa} Returns itself to allow method chaining.

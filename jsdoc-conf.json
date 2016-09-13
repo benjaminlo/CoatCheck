@@ -1,0 +1,11 @@
+{
+  "source": {
+    "include": "./alexa/"
+  },
+  "templates": {
+    "cleverLinks": true
+  },
+  "opts": {
+    "destination": "./docs/"
+  }
+}

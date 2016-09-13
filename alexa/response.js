@@ -42,21 +42,31 @@ function buildSpeechletResponse (options) {
 class Response {
 
     /**
-     * @this {Response}
+     * @this Response
      */
     constructor () {
         this._response = {
-            shouldEndSession: true
+            version: Constants.VERSION_NUMBER,
+            response: {
+                shouldEndSession: true
+            }
         };
         this._directives = [];
     }
 
     /**
      * Responds to the Alexa skill with a JSON object indicating that the Echo should prompt the user with
-     * text-to-speech audio as specified in speech and then wait for a response. Note: If speech is not valid as part of
-     * a response to the event, it may be removed by the Alexa object before the response is sent.
+     * text-to-speech audio as specified in speech and then wait for a response. This method cannot be used if
+     * {@link #askWithCard}, {@link #tell}, {@link #tellWithCard}, or another {@link #ask} has already been called.
+     * Note: If speech is not valid as part of a response to the event, it may be removed by the {@link Alexa} object
+     * before the response is sent.
      *
-     * @this {Response}
+     * @example
+     * let question = new Speech(Constants.SPEECH_TYPE_TEXT, 'What can I do for you?');
+     * let reprompt = new Speech(Constants.SPEECH_TYPE_TEXT, 'I did not hear a request. Is there anything I can do for you?');
+     * response.ask(question, reprompt);
+     *
+     * @this Response
      * @param {Speech} speech The speech object that will be sent to the skill as the main text-to-speech audio.
      * @param {Speech} repromptSpeech The speech object that will be sent to the skill as the reprompt text-to-speech
      * audio.
@@ -76,10 +86,17 @@ class Response {
     /**
      * Responds to the Alexa skill with a JSON object indicating that the Echo should prompt the user with
      * text-to-speech audio as specified in speech and display content as a card in the Alexa companion app and then
-     * wait for a response. Note: If speech or card are not valid as part of a response to the event, they may be
-     * removed by the Alexa object before the response is sent.
+     * wait for a response. This method cannot be used if {@link #ask}, {@link #tell}, {@link #tellWithCard}, or
+     * another {@link #askWithCard} has already been called. Note: If speech or card are not valid as part of a response
+     * to the event, they may be removed by the Alexa object before the response is sent.
      *
-     * @this {Response}
+     * @example
+     * let question = new Speech(Constants.SPEECH_TYPE_TEXT, 'What can I do for you?');
+     * let reprompt = new Speech(Constants.SPEECH_TYPE_TEXT, 'I didn't hear a request. Is there anything I can do for you?');
+     * let card = new Card('What Can I Do', 'I can do a lot for you!');
+     * response.askWithCard(question, reprompt, card);
+     *
+     * @this Response
      * @param {Speech} speech The speech object that will be sent to the skill as the main text-to-speech audio.
      * @param {Speech} repromptSpeech The speech object that will be sent to the skill as the reprompt text-to-speech
      * audio.
@@ -100,10 +117,15 @@ class Response {
 
     /**
      * Responds to the Alexa skill with a JSON object indicating that the Echo should prompt the user with
-     * text-to-speech audio as specified in speech. Note: If speech is not valid as part of a response to the event, it
-     * may be removed by the Alexa object before the response is sent.
+     * text-to-speech audio as specified in speech. This method cannot be used if {@link #ask}, {@link #askWithCard},
+     * {@link #tellWithCard}, or another {@link #tell} has already been called. Note: If speech is not valid as part of
+     * a response to the event, it may be removed by the Alexa object before the response is sent.
      *
-     * @this {Response}
+     * @example
+     * let phrase = new Speech(Constants.SPEECH_TYPE_TEXT, 'It is sunny outside today.');
+     * response.tell(phrase);
+     *
+     * @this Response
      * @param {Speech} speech The speech object that will be sent to the skill.
      */
     tell (speech) {
@@ -119,11 +141,17 @@ class Response {
 
     /**
      * Responds to the Alexa skill with a JSON object indicating that the Echo should prompt the user with
-     * text-to-speech audio as specified in speech and display content as a card in the Alexa companion app. Note: If
-     * speech or card are not valid as part of a response to the event, they may be removed by the Alexa object before
-     * the response is sent.
+     * text-to-speech audio as specified in speech and display content as a card in the Alexa companion app. This method
+     * cannot be used if {@link #ask}, {@link #askWithCard}, {@link #tell}, or another {@link #tellWithCard} has already
+     * been called. Note: If speech or card are not valid as part of a response to the event, they may be removed by the
+     * Alexa object before the response is sent.
      *
-     * @this {Response}
+     * @example
+     * let phrase = new Speech(Constants.SPEECH_TYPE_TEXT, 'It is sunny outside today.');
+     * let card = new Card('Today's Weather Report', 'Sunny!');
+     * response.tellWithCard(phrase, card);
+     *
+     * @this Response
      * @param {Speech} speech The speech object that will be sent to the skill.
      * @param {Card} card The card object that will be sent to the skill.
      */
@@ -143,7 +171,11 @@ class Response {
      * Adds a Directive object to this response. Note: If the directive object is not valid as part of a response to the
      * event, it may be removed by the Alexa object before the response is sent.
      *
-     * @this {Response}
+     * @example
+     * let directive = new Directive(context);
+     * response.addDirective(directive);
+     *
+     * @this Response
      * @param {Directive} directive The directive to add to the Response object.
      */
     addDirective (directive) {
@@ -155,10 +187,10 @@ class Response {
     }
 
     /**
-     * Removes all the invalid directives. A {Directive} is valid only if it is the only one of its type, and if it is
+     * Removes all the invalid directives. A {@link Directive} is valid only if it is the only one of its type, and if it is
      * passed in as this method's parameter.
      *
-     * @param {Array} validDirectives The list of {Directive} types that are valid. This can either be
+     * @param {Array} validDirectives The list of {@link Directive} types that are valid. This can either be
      * {@link Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_PLAY}, {@link Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_STOP}, or
      * {@link Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_CLEAR_QUEUE}. Any Directives of any other type will be removed.
      */

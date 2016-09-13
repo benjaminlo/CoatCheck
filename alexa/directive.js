@@ -4,11 +4,14 @@ const Constants = require('./constants.js');
 /**
  * A Directive object is used to create a valid JSON property for a Response object that will tell a client to perform
  * a certain action.
+ *
+ * @example
+ * let directive = new Directive(context);
  */
 class Directive {
 
     /**
-     * @this {Directive}
+     * @this Directive
      * @param {Object} context The context passed in from Alexa.
      */
     constructor (context) {
@@ -19,7 +22,7 @@ class Directive {
      * Configures the Directive object to represent a Play Directive. Validates the input and creates a new Audio Item
      * property in the response so that an audio stream can be played.
      *
-     * @this {Directive}
+     * @this Directive
      * @param {string} playBehavior The playBehavior must be Constants.PLAY_BEHAVIOR_REPLACE_ALL,
      * Constants.PLAY_BEHAVIOR_ENQUEUE, or Constants.PLAY_BEHAVIOR_REPLACE_ENQUEUED.
      * @param {string} url The url of the audio stream.
@@ -60,7 +63,7 @@ class Directive {
     /**
      * Configures the Directive object to represent a Stop Directive.
      *
-     * @this {Directive}
+     * @this Directive
      */
     setTypeToStop () {
         this.type = Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_STOP;
@@ -69,7 +72,7 @@ class Directive {
     /**
      * Configures the Directive object to represent a Clear Queue Directive and validates the input.
      *
-     * @this {Directive}
+     * @this Directive
      * @param {string} clearBehavior The clearBehavior must be Constants.CLEAR_BEHAVIOR_ENQUEUED or
      * Constants.CLEAR_BEHAVIOR_ALL.
      */
@@ -85,7 +88,7 @@ class Directive {
     /**
      * Configures the Directive object to be added to the Response object.
      *
-     * @this {Directive}
+     * @this Directive
      * @returns {Object} directive The directive to add to the Response object.
      */
     parse () {
