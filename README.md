@@ -6,7 +6,22 @@ A repository that can be forked to ease the initial development of an Amazon Ale
 
 ## Installation
 
-Currently the project has no dependencies.
+Currently the project has no production dependencies.
+
+## Running Tests
+
+Tests are run using mocha.
+To install Mocha, run the npm install command.
+
+```
+$ npm install
+```
+
+After installing the Mocha dependency, you can run tests using the npm test command.
+
+```
+$ npm test
+```
 
 ## Usage
 
