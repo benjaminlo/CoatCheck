@@ -398,6 +398,11 @@ function handlePlaybackControllerRequest(event, context, session) {
         throw `Playback Controller request ${event.request.type} not supported.`;
     }
 
+    response.filterDirectives([
+        Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_PLAY,
+        Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_STOP,
+        Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_CLEAR_QUEUE
+    ]);
     response.removeSpeech();
     response.removeReprompt();
     response.removeCard();
