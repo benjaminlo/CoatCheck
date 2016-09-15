@@ -10,6 +10,9 @@ let onLaunch = (response, event, context, session) => {
 let handlers = {};
 let audioHandlers = {};
 let playbackHandlers = {};
+let exceptionHandler = (event, context, session) => {
+    throw 'Unimplemented system exception handler.';
+};
 let onSessionEnded = (event, context, session) => {
     throw 'Unimplemented session ended handler.';
 };
@@ -55,7 +58,7 @@ class Alexa {
                 validateAppId(applicationId);
                 makeResponse(event, context, session);
             } catch (err) {
-                console.log(err);
+                context.fail(err);
             }
         };
         return this;
@@ -181,6 +184,20 @@ class Alexa {
         playbackHandlers = playbackControllerHandlers;
         return this;
     }
+
+    /**
+     * This is required if you want your skill to run logic after receiving a system exception request.
+     *
+     * @this Alexa
+     * @param {function} systemExceptionHandler The custom callback to be executed. It's the event, context, and session
+     * so you can grab data from those objects, but it is not passed a {@link Response} since you are not allowed to
+     * send a response.
+     * @returns {Alexa} Returns itself to allow method chaining.
+     */
+    setSystemExceptionHandler(systemExceptionHandler) {
+        exceptionHandler = systemExceptionHandler;
+        return this;
+    }
 }
 
 /**
@@ -237,6 +254,8 @@ function makeResponse(event, context, session) {
         case Constants.REQUEST_TYPE_PLAYBACK_CONTROLLER_PREVIOUS_COMMAND_ISSUED:
             handlePlaybackControllerRequest(event, context, session);
             break;
+        case Constants.REQUEST_TYPE_SYSTEM_EXCEPTION_ENCOUNTERED:
+            handleSystemExceptionEncountered(event, context, session);
         default:
             throw `Request type ${event.request.type} not supported.`;
             break;
@@ -408,6 +427,24 @@ function handlePlaybackControllerRequest(event, context, session) {
     response.removeCard();
 
     context.succeed(response._response);
+}
+
+/**
+ * Checks if the exceptionHandler exists and if so, calls it. Then it completes the Lambda functione execution
+ * successfully.
+ *
+ * @private
+ * @param {Object} event The event object from exports.handler.
+ * @param {Object} context The context passed in from Alexa.
+ * @param {Object} session The session passed in from Alexa.
+ */
+function handleSystemExceptionEncountered(event, context, session) {
+    let callback = exceptionHandler;
+    if (callback) {
+        callback(event, context, session);
+    }
+
+    context.succeed();
 }
 
 module.exports = Alexa;
