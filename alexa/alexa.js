@@ -279,7 +279,7 @@ function handleLaunch(event, context, callback) {
     ]);
 
     context.callbackWaitsForEmptyEventLoop = false;
-    callback(response._response);
+    callback(null, response._response);
 }
 
 /**
@@ -307,7 +307,7 @@ function handleIntent(event, context, callback) {
     ]);
 
     context.callbackWaitsForEmptyEventLoop = false;
-    callback(response._response);
+    callback(null, response._response);
 }
 
 /**
@@ -354,7 +354,7 @@ function handleAudioPlayerRequestWithStopOrClear(event, context, callback) {
     response.removeCard();
 
     context.callbackWaitsForEmptyEventLoop = false;
-    callback(response._response);
+    callback(null, response._response);
 }
 
 /**
@@ -406,7 +406,7 @@ function handleAudioPlayerRequest(event, context, callback) {
     response.removeCard();
 
     context.callbackWaitsForEmptyEventLoop = false;
-    callback(response._response);
+    callback(null, response._response);
 }
 
 /**
@@ -438,7 +438,7 @@ function handlePlaybackControllerRequest(event, context, callback) {
     response.removeCard();
 
     context.callbackWaitsForEmptyEventLoop = false;
-    callback(response._response);
+    callback(null, response._response);
 }
 
 /**
