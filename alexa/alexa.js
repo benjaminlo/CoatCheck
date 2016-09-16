@@ -4,16 +4,16 @@ const Constants = require('./constants.js');
 const Response = require('./response.js');
 
 let APP_ID;
-let onLaunch = (response, event, context, session) => {
+let onLaunch = (event, response) => {
     throw 'Unimplemented launch handler.';
 };
 let handlers = {};
 let audioHandlers = {};
 let playbackHandlers = {};
-let exceptionHandler = (event, context, session) => {
+let exceptionHandler = (event) => {
     throw 'Unimplemented system exception handler.';
 };
-let onSessionEnded = (event, context, session) => {
+let onSessionEnded = (event) => {
     throw 'Unimplemented session ended handler.';
 };
 
@@ -24,7 +24,8 @@ class Alexa {
 
     /**
      * @this Alexa
-     * @param {string} appId The Application ID that you can find on the Alexa Skill dashboard in the following format: <code>'amzn1.echo-sdk.amz-.app.[your-unique-value-here]'</code>.
+     * @param {string} appId The Application ID that you can find on the Alexa Skill dashboard in the following format:
+     * <code>'amzn1.echo-sdk.amz-.app.[your-unique-value-here]'</code>.
      */
     constructor(appId) {
         APP_ID = appId;
@@ -34,31 +35,29 @@ class Alexa {
      * This is required if you want your skill to listen and send responses on Lambda.
      *
      * @this Alexa
-     * @param {Object} exports The variable to export the Lambda handler to.
+     * @param {Object} exports The exports variable to set the Lambda handler onto.
      * @returns {Alexa} Returns itself to allow method chaining.
      */
     createLambdaConnection(exports) {
         exports.handler = (event, context, callback) => {
             let applicationId;
-            let session;
 
             if (!event) {
                 event = {};
             }
 
             if (event.session) {
-                session = event.session;
-                applicationId = session.application.applicationId;
+                applicationId = event.session.application.applicationId;
             } else {
-                session = {};
                 applicationId = event.context.System.application.applicationId;
             }
 
             try {
                 validateAppId(applicationId);
-                makeResponse(event, context, session);
+                makeResponse(event, context, callback);
             } catch (err) {
-                context.fail(err);
+                context.callbackWaitsForEmptyEventLoop = false;
+                callback(err);
             }
         };
         return this;
@@ -69,13 +68,13 @@ class Alexa {
      * reply to the user when they open your skill without a command.
      * <br />
      * The launch callback will run when the skill launches without a command.
-     * It will be provided a {@link Response} object that you can use to respond to the user, as well as an event,
-     * context, and session so that your skill can grab data from them.
+     * It will be provided a {@link Response} object that you can use to respond to the user, as well as an event so
+     * that your skill can grab data from ite.
      *
      * @example
-     * let launchHandler = (response, event, context, session) => {
+     * let launchHandler = (event, response) => {
      *   response.ask(new Speech(Constants.SPEECH_TYPE_SSML, '<speak>Replace this with a launch menu.</speak>'),
-     *   new Speech(Constants.SPEECH_TYPE_SSML, '<speak>Replace this with reprompt text.</speak>'));
+     *     new Speech(Constants.SPEECH_TYPE_SSML, '<speak>Replace this with reprompt text.</speak>'));
      * }
      *
      * setLaunchHandler (launchHandler);
@@ -96,11 +95,11 @@ class Alexa {
      * The intent callbacks parameter should be a JavaScript object where the keys are mapped to the names of Intents
      * that your skill should implement (as defined in your Intent Schema) and the values are the callback functions
      * that will run on those intents. Each function will be provided a {@link Response} object that you can use to
-     * respond to the user, as well as an event, context, and session so that your skill can grab data from them.
+     * respond to the user, as well as an event so that your skill can grab data from ite.
      *
      * @example
      * let intentHandlers = {
-     *   'YourIntent': (response, event, context, session) => {
+     *   'YourIntent': (event, response) => {
      *      response.tell(new Speech(Constants.SPEECH_TYPE_SSML, '<speak>Replace this with your intent response.</speak>'));
      * };
      *
@@ -118,11 +117,11 @@ class Alexa {
 
     /**
      * Setes the callback that will run when the skill ends a session. This is required if you want your skill to run
-     * logic after the session has ended. This callback will be provided an event, context, and session is so that your
-     * skill can grab data from them.
+     * logic after the session has ended. This callback will be provided an event is so that your skill can grab data
+     * from it.
      *
      * @example
-     * let onSessionEnded = (event, context, session) => {
+     * let onSessionEnded = (event) => {
      *   // Put your custom session ended logic in here
      * };
      *
@@ -144,19 +143,19 @@ class Alexa {
      *
      * @example
      * let audioPlayerHandlers = {};
-     * audioPlayerHandlers[Constants.REQUEST_TYPE_AUDIO_PLAYER_PLAYBACK_STARTED] = (event, context, session) => {
+     * audioPlayerHandlers[Constants.REQUEST_TYPE_AUDIO_PLAYER_PLAYBACK_STARTED] = (event, response) => {
      *   // do stuff
      * };
-     * audioPlayerHandlers[Constants.REQUEST_TYPE_AUDIO_PLAYER_PLAYBACK_FAILED] = (event, context, session) => {
+     * audioPlayerHandlers[Constants.REQUEST_TYPE_AUDIO_PLAYER_PLAYBACK_FAILED] = (event, response) => {
      *   // do stuff
      * };
-     * audioPlayerHandlers[Constants.REQUEST_TYPE_AUDIO_PLAYER_PLAYBACK_STOPPED] = (event, context, session) => {
+     * audioPlayerHandlers[Constants.REQUEST_TYPE_AUDIO_PLAYER_PLAYBACK_STOPPED] = (event) => {
      *   // do stuff
      * };
-     * * audioPlayerHandlers[Constants.REQUEST_TYPE_AUDIO_PLAYER_PLAYBACK_NEARLY_FINISHED] = (event, context, session) => {
+     * * audioPlayerHandlers[Constants.REQUEST_TYPE_AUDIO_PLAYER_PLAYBACK_NEARLY_FINISHED] = (event, response) => {
      *   // do stuff
      * };
-     * audioPlayerHandlers[Constants.REQUEST_TYPE_AUDIO_PLAYER_PLAYBACK_FAILED] = (event, context, session) => {
+     * audioPlayerHandlers[Constants.REQUEST_TYPE_AUDIO_PLAYER_PLAYBACK_FAILED] = (event, response) => {
      *   // do stuff
      * };
      *
@@ -189,9 +188,8 @@ class Alexa {
      * This is required if you want your skill to run logic after receiving a system exception request.
      *
      * @this Alexa
-     * @param {function} systemExceptionHandler The custom callback to be executed. It's the event, context, and session
-     * so you can grab data from those objects, but it is not passed a {@link Response} since you are not allowed to
-     * send a response.
+     * @param {function} systemExceptionHandler The custom callback to be executed. It's passed the event so you can
+     * grab data from it, but it is not passed a {@link Response} since you are not allowed to send a response.
      * @returns {Alexa} Returns itself to allow method chaining.
      */
     setSystemExceptionHandler(systemExceptionHandler) {
@@ -222,40 +220,40 @@ function validateAppId(appId) {
  * SessionEndedRequest required).
  *
  * @private
- * @param {Object} event The event object from exports.handler.
- * @param {Object} context The context passed in from Alexa.
- * @param {Object} session The session passed in from Alexa.
+ * @param {Object} event The event object passed in from the Lambda handler. This will contain the Alexa data.
+ * @param {Object} context The context passed in from the Lambda handler.
+ * @param {function} callback The callback passed in from the Lambda handler.
  */
-function makeResponse(event, context, session) {
+function makeResponse(event, context, callback) {
     switch (event.request.type) {
         case Constants.REQUEST_TYPE_LAUNCH:
-            handleLaunch(event, context, session);
+            handleLaunch(event, context, callback);
             break;
         case Constants.REQUEST_TYPE_INTENT:
-            handleIntent(event, context, session);
+            handleIntent(event, context, callback);
             break;
         case Constants.REQUEST_TYPE_SESSION_ENDED:
-            onSessionEnded(event, context, session);
+            handleSessionEnded(event, context, callback);
             break;
         case Constants.REQUEST_TYPE_AUDIO_PLAYER_PLAYBACK_STARTED:
         case Constants.REQUEST_TYPE_AUDIO_PLAYER_PLAYBACK_FINISHED:
-            handleAudioPlayerRequestWithStopOrClear(event, context, session);
+            handleAudioPlayerRequestWithStopOrClear(event, context, callback);
             break;
         case Constants.REQUEST_TYPE_AUDIO_PLAYER_PLAYBACK_STOPPED:
-            handleAudioPlayerRequestWithNoResponse(event, context, session);
+            handleAudioPlayerRequestWithNoResponse(event, context, callback);
             break;
         case Constants.REQUEST_TYPE_AUDIO_PLAYER_PLAYBACK_NEARLY_FINISHED:
         case Constants.REQUEST_TYPE_AUDIO_PLAYER_PLAYBACK_FAILED:
-            handleAudioPlayerRequest(event, context, session);
+            handleAudioPlayerRequest(event, context, callback);
             break;
         case Constants.REQUEST_TYPE_PLAYBACK_CONTROLLER_NEXT_COMMAND_ISSUED:
         case Constants.REQUEST_TYPE_PLAYBACK_CONTROLLER_PAUSE_COMMAND_ISSUED:
         case Constants.REQUEST_TYPE_PLAYBACK_CONTROLLER_PLAY_COMMAND_ISSUED:
         case Constants.REQUEST_TYPE_PLAYBACK_CONTROLLER_PREVIOUS_COMMAND_ISSUED:
-            handlePlaybackControllerRequest(event, context, session);
+            handlePlaybackControllerRequest(event, context, callback);
             break;
         case Constants.REQUEST_TYPE_SYSTEM_EXCEPTION_ENCOUNTERED:
-            handleSystemExceptionEncountered(event, context, session);
+            handleSystemExceptionEncountered(event, context, callback);
         default:
             throw `Request type ${event.request.type} not supported.`;
             break;
@@ -266,12 +264,14 @@ function makeResponse(event, context, session) {
  * Wraps launch event callback.
  *
  * @private
- * @param {Object} event The event object from exports.handler.
- * @param {Object} context The context passed in from Alexa.
- * @param {Object} session The session passed in from Alexa.
+ * @param {Object} event The event object passed in from the Lambda handler. This will contain the Alexa data.
+ * @param {Object} context The context passed in from the Lambda handler.
+ * @param {function} callback The callback passed in from the Lambda handler.
  */
-function handleLaunch(event, context, session) {
-    let response = onLaunch(new Response(), event, context, session);
+function handleLaunch(event, context, callback) {
+    let response = new Response();
+
+    onLaunch(event, response);
 
     response.filterDirectives([
         Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_PLAY,
@@ -279,23 +279,24 @@ function handleLaunch(event, context, session) {
         Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_CLEAR_QUEUE
     ]);
 
-    context.succeed(response);
+    context.callbackWaitsForEmptyEventLoop = false;
+    callback(null, response._response);
 }
 
 /**
  * Checks if the custom intent callback function exists and if so, calls it.
  *
  * @private
- * @param {Object} event The event object from exports.handler.
- * @param {Object} context The context passed in from Alexa.
- * @param {Object} session The session passed in from Alexa.
+ * @param {Object} event The event object passed in from the Lambda handler. This will contain the Alexa data.
+ * @param {Object} context The context passed in from the Lambda handler.
+ * @param {function} callback The callback passed in from the Lambda handler.
  */
-function handleIntent(event, context, session) {
+function handleIntent(event, context, callback) {
     let response = new Response();
-    let callback = handlers[event.request.intent.name];
+    let handler = handlers[event.request.intent.name];
 
-    if (callback) {
-        response = callback(response, event, context, session);
+    if (handler) {
+        handler(event, response);
     } else {
         throw `Intent ${event.request.intent.name} not supported.`;
     }
@@ -306,19 +307,23 @@ function handleIntent(event, context, session) {
         Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_CLEAR_QUEUE
     ]);
 
-    context.succeed(response._response);
+    context.callbackWaitsForEmptyEventLoop = false;
+    callback(null, response._response);
 }
 
 /**
  * Wraps session ended event callback.
  *
  * @private
- * @param {Object} event The event object from exports.handler.
- * @param {Object} context The context passed in from Alexa.
- * @param {Object} session The session passed in from Alexa.
+ * @param {Object} event The event object passed in from the Lambda handler. This will contain the Alexa data.
+ * @param {Object} context The context passed in from the Lambda handler.
+ * @param {function} callback The callback passed in from the Lambda handler.
  */
-function handleSessionEnded(event, context, session) {
-    onSessionEnded(event, context, session);
+function handleSessionEnded(event, context, callback) {
+    onSessionEnded(event);
+
+    context.callbackWaitsForEmptyEventLoop = false;
+    callback();
 }
 
 /**
@@ -327,16 +332,16 @@ function handleSessionEnded(event, context, session) {
  * skill.
  *
  * @private
- * @param {Object} event The event object from exports.handler.
- * @param {Object} context The context passed in from Alexa.
- * @param {Object} session The session passed in from Alexa.
+ * @param {Object} event The event object passed in from the Lambda handler. This will contain the Alexa data.
+ * @param {Object} context The context passed in from the Lambda handler.
+ * @param {function} callback The callback passed in from the Lambda handler.
  */
-function handleAudioPlayerRequestWithStopOrClear(event, context, session) {
+function handleAudioPlayerRequestWithStopOrClear(event, context, callback) {
     let response = new Response();
-    let callback = audioHandlers[event.request.type];
+    let handler = audioHandlers[event.request.type];
 
-    if (callback) {
-        response = callback(response, event, context, session);
+    if (handler) {
+        handler(event, response);
     } else {
         throw `Audio Player request ${event.request.type} not supported.`;
     }
@@ -349,24 +354,28 @@ function handleAudioPlayerRequestWithStopOrClear(event, context, session) {
     response.removeReprompt();
     response.removeCard();
 
-    context.succeed(response._response);
+    context.callbackWaitsForEmptyEventLoop = false;
+    callback(null, response._response);
 }
 
 /**
  * Checks if the audio player request callback function exists and if so, calls it. This makes no response to the skill.
  *
  * @private
- * @param {Object} event The event object from exports.handler.
- * @param {Object} context The context passed in from Alexa.
- * @param {Object} session The session passed in from Alexa.
+ * @param {Object} event The event object passed in from the Lambda handler. This will contain the Alexa data.
+ * @param {Object} context The context passed in from the Lambda handler.
+ * @param {function} callback The callback passed in from the Lambda handler.
  */
-function handleAudioPlayerRequestWithNoResponse(event, context, session) {
-    let callback = audioHandlers[event.request.type];
-    if (callback) {
-        callback(event, context, session);
+function handleAudioPlayerRequestWithNoResponse(event, context, callback) {
+    let handler = audioHandlers[event.request.type];
+    if (handler) {
+        handler(event);
     } else {
         throw `Audio Player request ${event.request.type} not supported.`;
     }
+
+    context.callbackWaitsForEmptyEventLoop = false;
+    callback();
 }
 
 /**
@@ -374,15 +383,16 @@ function handleAudioPlayerRequestWithNoResponse(event, context, session) {
  * speech properties, reprompt properties, or card properties. Finally it sends the response back to the skill.
  *
  * @private
- * @param {Object} event The event object from exports.handler.
- * @param {Object} context The context passed in from Alexa.
- * @param {Object} session The session passed in from Alexa.
+ * @param {Object} event The event object passed in from the Lambda handler. This will contain the Alexa data.
+ * @param {Object} context The context passed in from the Lambda handler.
+ * @param {function} callback The callback passed in from the Lambda handler.
  */
-function handleAudioPlayerRequest(event, context, session) {
+function handleAudioPlayerRequest(event, context, callback) {
     let response = new Response();
-    let callback = audioHandlers[event.request.type];
-    if (callback) {
-        response = callback(response, event, context, session);
+    let handler = audioHandlers[event.request.type];
+
+    if (handler) {
+        handler(event, response);
     } else {
         throw `Audio Player request ${event.request.type} not supported.`;
     }
@@ -396,7 +406,8 @@ function handleAudioPlayerRequest(event, context, session) {
     response.removeReprompt();
     response.removeCard();
 
-    context.succeed(response._response);
+    context.callbackWaitsForEmptyEventLoop = false;
+    callback(null, response._response);
 }
 
 /**
@@ -404,15 +415,16 @@ function handleAudioPlayerRequest(event, context, session) {
  * speech properties, reprompt properties, or card properties. Finally it sends the response back to the skill.
  *
  * @private
- * @param {Object} event The event object from exports.handler.
- * @param {Object} context The context passed in from Alexa.
- * @param {Object} session The session passed in from Alexa.
+ * @param {Object} event The event object passed in from the Lambda handler. This will contain the Alexa data.
+ * @param {Object} context The context passed in from the Lambda handler.
+ * @param {function} callback The callback passed in from the Lambda handler.
  */
-function handlePlaybackControllerRequest(event, context, session) {
+function handlePlaybackControllerRequest(event, context, callback) {
     let response = new Response();
-    let callback = playbackHandlers[event.request.type];
-    if (callback) {
-        response = callback(response, event, context, session);
+    let handler = playbackHandlers[event.request.type];
+
+    if (handler) {
+        handler(event, response);
     } else {
         throw `Playback Controller request ${event.request.type} not supported.`;
     }
@@ -426,7 +438,8 @@ function handlePlaybackControllerRequest(event, context, session) {
     response.removeReprompt();
     response.removeCard();
 
-    context.succeed(response._response);
+    context.callbackWaitsForEmptyEventLoop = false;
+    callback(null, response._response);
 }
 
 /**
@@ -434,17 +447,19 @@ function handlePlaybackControllerRequest(event, context, session) {
  * successfully.
  *
  * @private
- * @param {Object} event The event object from exports.handler.
- * @param {Object} context The context passed in from Alexa.
- * @param {Object} session The session passed in from Alexa.
+ * @param {Object} event The event object passed in from the Lambda handler. This will contain the Alexa data.
+ * @param {Object} context The context passed in from the Lambda handler.
+ * @param {function} callback The callback passed in from the Lambda handler.
  */
-function handleSystemExceptionEncountered(event, context, session) {
-    let callback = exceptionHandler;
-    if (callback) {
-        callback(event, context, session);
+function handleSystemExceptionEncountered(event, context, callback) {
+    let handler = exceptionHandler;
+
+    if (handler) {
+        handler(event);
     }
 
-    context.succeed();
+    context.callbackWaitsForEmptyEventLoop = false;
+    callback();
 }
 
 module.exports = Alexa;
