@@ -61,6 +61,8 @@ playbackControllerHandlers[Constants.REQUEST_TYPE_PLAYBACK_CONTROLLER_PREVIOUS_C
 let exceptionHandler = (event) => {
     // do stuff
     // exception handler is unable to send a response
+
+    throw (event.request);
 };
 
 let alexa = new Alexa(APP_ID)

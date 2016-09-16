@@ -56,7 +56,8 @@ class Alexa {
                 validateAppId(applicationId);
                 makeResponse(event, context, callback);
             } catch (err) {
-                context.fail(err);
+                context.callbackWaitsForEmptyEventLoop = false;
+                callback(err);
             }
         };
         return this;
