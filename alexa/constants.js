@@ -43,6 +43,8 @@ module.exports = {
     REQUEST_TYPE_PLAYBACK_CONTROLLER_PLAY_COMMAND_ISSUED: 'PlaybackController.PlayCommandIssued',
     REQUEST_TYPE_PLAYBACK_CONTROLLER_PREVIOUS_COMMAND_ISSUED: 'PlaybackController.PreviousCommandIssued',
 
+    REQUEST_TYPE_SYSTEM_EXCEPTION_ENCOUNTERED: 'System.ExceptionEncountered',
+
     DIRECTIVE_TYPE_AUDIO_PLAYER_PLAY: 'AudioPlayer.Play',
     DIRECTIVE_TYPE_AUDIO_PLAYER_STOP: 'AudioPlayer.Stop',
     DIRECTIVE_TYPE_AUDIO_PLAYER_CLEAR_QUEUE: 'AudioPlayer.ClearQueue',
