@@ -187,12 +187,13 @@ class Response {
     }
 
     /**
-     * Removes all the invalid directives. A {@link Directive} is valid only if it is the only one of its type, and if it is
-     * passed in as this method's parameter.
+     * Removes all the invalid directives from this Response. A {@link Directive} is valid only if it is the first of
+     * its type, and if its type is passed in as this method's parameter.
      *
-     * @param {Array} validDirectives The list of {@link Directive} types that are valid. This can either be
+     * @param {Array} validDirectives The list of {@link Directive} types that are valid. These can either be
      * {@link Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_PLAY}, {@link Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_STOP}, or
-     * {@link Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_CLEAR_QUEUE}. Any Directives of any other type will be removed.
+     * {@link Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_CLEAR_QUEUE}. The first directive of each type added in this
+     * Response will be retained. Any subsequent Directives or Directives of any other type will be removed.
      */
     filterDirectives(validDirectives) {
         if (validDirectives.constructor !== Array) {

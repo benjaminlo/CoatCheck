@@ -27,9 +27,11 @@ class Directive {
      * Constants.PLAY_BEHAVIOR_ENQUEUE, or Constants.PLAY_BEHAVIOR_REPLACE_ENQUEUED.
      * @param {string} url The url of the audio stream.
      * @param {string} token The token that represents the audio stream.
-     * @param {string} expectedPreviousToken The token that represents the expected previous stream.
+     * @param {string} expectedPreviousToken The token that represents the expected previous stream. Set this to
+     * {@code null} if the playBehavior is Constants.PLAY_BEHAVIOR_REPLACE_ALL.
      * @param {number} offsetInMilliseconds The offset in milliseconds in the stream from which Alexa should begin
      * playback.
+     * @returns {Directive} Returns itself to allow method chaining.
      */
     setTypeToPlay(playBehavior, url, token, expectedPreviousToken, offsetInMilliseconds) {
         this.type = Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_PLAY;
@@ -41,32 +43,51 @@ class Directive {
             throw Constants.ERROR_MESSAGE_INVALID_PLAY_BEHAVIOR;
         }
 
-        if (!(typeof url === Constants.TYPE_STRING || url instanceof String))
+        if (!(typeof url === Constants.TYPE_STRING || url instanceof String)) {
             throw Constants.ERROR_MESSAGE_INVALID_TYPE_URL;
-        if (!(typeof token === Constants.TYPE_STRING || token instanceof String))
+        }
+
+        if (!(typeof token === Constants.TYPE_STRING || token instanceof String)) {
             throw Constants.ERROR_MESSAGE_INVALID_TYPE_TOKEN;
-        if (!(typeof expectedPreviousToken === Constants.TYPE_STRING || expectedPreviousToken instanceof String))
-            throw Constants.ERROR_MESSAGE_INVALID_TYPE_EXPECTED_PREVIOUS_TOKEN;
-        if (!(!isNaN(parseFloat(offsetInMilliseconds)) && isFinite(offsetInMilliseconds)))
+        }
+
+        if (playBehavior === Constants.PLAY_BEHAVIOR_ENQUEUE || playBehavior === Constants.PLAY_BEHAVIOR_REPLACE_ENQUEUED) {
+            if (!(typeof expectedPreviousToken === Constants.TYPE_STRING || expectedPreviousToken instanceof String)) {
+                throw Constants.ERROR_MESSAGE_INVALID_TYPE_EXPECTED_PREVIOUS_TOKEN;
+            }
+        } else {
+            if (expectedPreviousToken) {
+                throw Constants.ERROR_MESSAGE_INVALID_TYPE_EXPECTED_PREVIOUS_TOKEN;
+            }
+        }
+
+        if (!(!isNaN(parseFloat(offsetInMilliseconds)) && isFinite(offsetInMilliseconds))) {
             throw Constants.ERROR_MESSAGE_INVALID_TYPE_OFFSET_IN_MILLISECONDS;
+        }
 
         this.audioItem = {
             stream: {
                 url,
                 token,
-                expectedPreviousToken,
                 offsetInMilliseconds
             }
         };
+
+        this.audioItem.stream.expectedPreviousToken = expectedPreviousToken;
+
+        return this;
     }
 
     /**
      * Configures the Directive object to represent a Stop Directive.
      *
      * @this Directive
+     * @returns {Directive} Returns itself to allow method chaining.
      */
     setTypeToStop() {
         this.type = Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_STOP;
+
+        return this;
     }
 
     /**
@@ -75,6 +96,7 @@ class Directive {
      * @this Directive
      * @param {string} clearBehavior The clearBehavior must be Constants.CLEAR_BEHAVIOR_ENQUEUED or
      * Constants.CLEAR_BEHAVIOR_ALL.
+     * @returns {Directive} Returns itself to allow method chaining.
      */
     setTypeToClearQueue(clearBehavior) {
         this.type = Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_CLEAR_QUEUE;
@@ -83,6 +105,8 @@ class Directive {
         } else {
             throw Constants.ERROR_MESSAGE_INVALID_CLEAR_BEHAVIOR;
         }
+
+        return this;
     }
 
     /**

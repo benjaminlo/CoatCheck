@@ -1,14 +1,15 @@
 "use strict";
-var assert = require('assert');
+let assert = require('assert');
 
 const Card = require('../alexa/card.js');
 const Constants = require('../alexa/constants.js');
+const Directive = require('../alexa/directive.js');
 const Response = require('../alexa/response.js');
 const Speech = require('../alexa/speech.js');
 
 describe('Response', function () {
     describe('#constructor()', function () {
-        var response;
+        let response;
 
         beforeEach(function () {
             response = new Response();
@@ -34,7 +35,7 @@ describe('Response', function () {
     });
 
     describe('#tell()', function () {
-        var response;
+        let response;
 
         beforeEach(function () {
             response = new Response();
@@ -69,8 +70,8 @@ describe('Response', function () {
         });
 
         it('should have the proper properties after a `tell` with type PlainText', function () {
-            var speechText = 'The quick brown fox jumps over the lazy dog.';
-            var speech = new Speech(Constants.SPEECH_TYPE_TEXT, speechText);
+            let speechText = 'The quick brown fox jumps over the lazy dog.';
+            let speech = new Speech(Constants.SPEECH_TYPE_TEXT, speechText);
             response.tell(speech);
 
             // check shouldEndSession
@@ -91,8 +92,8 @@ describe('Response', function () {
         });
 
         it('should have the proper properties after a `tell` with type SSML', function () {
-            var speechText = '<speak>The quick brown fox jumps over the lazy dog.</speak>';
-            var speech = new Speech(Constants.SPEECH_TYPE_SSML, speechText);
+            let speechText = '<speak>The quick brown fox jumps over the lazy dog.</speak>';
+            let speech = new Speech(Constants.SPEECH_TYPE_SSML, speechText);
             response.tell(speech);
 
             // check shouldEndSession
@@ -114,15 +115,15 @@ describe('Response', function () {
     });
 
     describe('#tellWithCard()', function () {
-        var response;
+        let response;
 
         beforeEach(function () {
             response = new Response();
         });
 
         it('should throw an error if the wrong parameter is passed in', function () {
-            var speech = new Speech(Constants.SPEECH_TYPE_TEXT, 'valid speech');
-            var card = new Card('Valid', 'Card');
+            let speech = new Speech(Constants.SPEECH_TYPE_TEXT, 'valid speech');
+            let card = new Card('Valid', 'Card');
 
             assert.throws(function () {
                 response.tellWithCard();
@@ -186,8 +187,8 @@ describe('Response', function () {
         });
 
         it('should have the proper properties after a `tellWithCard` with type PlainText', function () {
-            var speech = new Speech(Constants.SPEECH_TYPE_TEXT, 'The quick brown fox jumps over the lazy dog.');
-            var card = new Card('Valid', 'Card');
+            let speech = new Speech(Constants.SPEECH_TYPE_TEXT, 'The quick brown fox jumps over the lazy dog.');
+            let card = new Card('Valid', 'Card');
 
             response.tellWithCard(speech, card);
 
@@ -209,8 +210,8 @@ describe('Response', function () {
         });
 
         it('should have the proper properties after a `tellWithCard` with type SSML', function () {
-            var speech = new Speech(Constants.SPEECH_TYPE_SSML, '<speak>The quick brown fox jumps over the lazy dog.</speak>');
-            var card = new Card('Valid', 'Card');
+            let speech = new Speech(Constants.SPEECH_TYPE_SSML, '<speak>The quick brown fox jumps over the lazy dog.</speak>');
+            let card = new Card('Valid', 'Card');
 
             response.tellWithCard(speech, card);
 
@@ -229,6 +230,82 @@ describe('Response', function () {
 
             // check card
             assert.deepStrictEqual(response._response.response.card, card);
+        });
+    });
+
+    describe('addDirectives', function () {
+        let response;
+
+        beforeEach(function () {
+            response = new Response();
+        });
+
+        it('should throw if a non-directive object is added', function () {
+            let nonDirective = {
+                "foo": "bar"
+            };
+
+            assert.throws(function () {
+                response.addDirective(nonDirective);
+            });
+        });
+
+        it('should only have one of each type of directive after being filtered', function () {
+            let playBehavior = Constants.PLAY_BEHAVIOR_REPLACE_ALL;
+            let url = 'http://foobar.com';
+            let token = 'my_token';
+            let expectedPreviousToken = null;
+            let offsetInMilliseconds = 0;
+            let firstPlayDirective = new Directive()
+                .setTypeToPlay(playBehavior, url, token, expectedPreviousToken, offsetInMilliseconds);
+            let secondPlayDirective = new Directive()
+                .setTypeToPlay(playBehavior, url, token, expectedPreviousToken, offsetInMilliseconds);
+
+            let firstStopDirective = new Directive()
+                .setTypeToStop();
+            let secondStopDirective = new Directive()
+                .setTypeToStop();
+
+            let clearBehavior = Constants.CLEAR_BEHAVIOR_ALL;
+            let firstClearQueueDirective = new Directive()
+                .setTypeToClearQueue(clearBehavior);
+            let secondClearQueueDirective = new Directive()
+                .setTypeToClearQueue(clearBehavior);
+
+            response.addDirective(firstPlayDirective);
+            response.addDirective(secondPlayDirective);
+            response.addDirective(firstStopDirective);
+            response.addDirective(secondStopDirective);
+            response.addDirective(firstClearQueueDirective);
+            response.addDirective(secondClearQueueDirective);
+
+            let validDirectives = [
+                Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_PLAY,
+                Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_STOP,
+                Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_CLEAR_QUEUE
+            ];
+
+            response.filterDirectives(validDirectives);
+
+            assert.equal(response._directives.length, 3);
+
+            let foundPlay = false;
+            let foundStop = false;
+            let foundClearQueue = false;
+
+            response._directives.forEach(directive => {
+                if (directive.type === Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_PLAY) {
+                    foundPlay = true;
+                } else if (directive.type === Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_STOP) {
+                    foundStop = true;
+                } else if (directive.type === Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_CLEAR_QUEUE) {
+                    foundClearQueue = true;
+                }
+            });
+
+            assert.ok(foundPlay);
+            assert.ok(foundStop);
+            assert.ok(foundClearQueue);
         });
     });
 });
