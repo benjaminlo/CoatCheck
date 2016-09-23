@@ -17,6 +17,14 @@ class Card {
      * @param {String} text The text to display on the card.
      */
     constructor(title, text) {
+        if (!(typeof title === Constants.TYPE_STRING || title instanceof String)) {
+            throw Constants.ERROR_MESSAGE_INVALID_TYPE_TITLE;
+        }
+
+        if (!(typeof text === Constants.TYPE_STRING || text instanceof String)) {
+            throw Constants.ERROR_MESSAGE_INVALID_TYPE_TEXT;
+        }
+
         this.type = Constants.CARD_TYPE_SIMPLE;
         this.title = title;
         this.content = text;

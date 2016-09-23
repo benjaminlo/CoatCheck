@@ -14,6 +14,8 @@ module.exports = {
     ERROR_MESSAGE_INVALID_TYPE_FILTER_DIRECTIVES: 'Invalid Type Filter directives expects an Array.',
 
     ERROR_MESSAGE_INVALID_PLAY_BEHAVIOR: 'Invalid Type Play Behavior must be Constants.PLAY_BEHAVIOR_REPLACE_ALL or Constants.PLAY_BEHAVIOR_ENQUEUE or Constants.PLAY_BEHAVIOR_REPLACE_ENQUEUED.',
+    ERROR_MESSAGE_INVALID_TYPE_TITLE: 'Invalid Type title must be a string.',
+    ERROR_MESSAGE_INVALID_TYPE_TEXT: 'Invalid Type text must be a string.',
     ERROR_MESSAGE_INVALID_TYPE_URL: 'Invalid Type URL must be a string.',
     ERROR_MESSAGE_INVALID_TYPE_TOKEN: 'Invalid Type Token must be a string.',
     ERROR_MESSAGE_INVALID_TYPE_EXPECTED_PREVIOUS_TOKEN: 'Invalid Type Expected previous token must be a string.',
