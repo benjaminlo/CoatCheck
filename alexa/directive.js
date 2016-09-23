@@ -61,7 +61,10 @@ class Directive {
             }
         }
 
-        if (!(!isNaN(parseFloat(offsetInMilliseconds)) && isFinite(offsetInMilliseconds))) {
+        let isOffsetString = typeof offsetInMilliseconds === Constants.TYPE_STRING || offsetInMilliseconds instanceof String;
+        let isOffsetNumber = !isNaN(offsetInMilliseconds) && isFinite(offsetInMilliseconds);
+
+        if (isOffsetString || !isOffsetNumber) {
             throw Constants.ERROR_MESSAGE_INVALID_TYPE_OFFSET_IN_MILLISECONDS;
         }
 
@@ -99,12 +102,13 @@ class Directive {
      * @returns {Directive} Returns itself to allow method chaining.
      */
     setTypeToClearQueue(clearBehavior) {
-        this.type = Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_CLEAR_QUEUE;
         if (clearBehavior === Constants.CLEAR_BEHAVIOR_ENQUEUED || clearBehavior === Constants.CLEAR_BEHAVIOR_ALL) {
             this.clearBehavior = clearBehavior;
         } else {
             throw Constants.ERROR_MESSAGE_INVALID_CLEAR_BEHAVIOR;
         }
+
+        this.type = Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_CLEAR_QUEUE;
 
         return this;
     }

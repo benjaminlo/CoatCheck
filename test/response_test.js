@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 let assert = require('assert');
 
 const Card = require('../alexa/card.js');
@@ -242,7 +242,7 @@ describe('Response', function () {
 
         it('should throw if a non-directive object is added', function () {
             let nonDirective = {
-                "foo": "bar"
+                'foo': 'bar'
             };
 
             assert.throws(function () {
@@ -306,6 +306,43 @@ describe('Response', function () {
             assert.ok(foundPlay);
             assert.ok(foundStop);
             assert.ok(foundClearQueue);
+        });
+    });
+
+    describe('#parse', function () {
+        let directive;
+
+        beforeEach(function () {
+            directive = new Directive();
+        });
+
+        it('should be of the correct type if set to type play', function () {
+            let playBehavior = Constants.PLAY_BEHAVIOR_REPLACE_ALL;
+            let url = 'http://foobar.com';
+            let token = 'my_token';
+            let expectedPreviousToken = null;
+            let offsetInMilliseconds = 0;
+            directive.setTypeToPlay(playBehavior, url, token, expectedPreviousToken, offsetInMilliseconds);
+
+            let parsedDirective = directive.parse();
+
+            assert.equal(parsedDirective[Constants.DIRECTIVE_PROPERTY_TYPE], Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_PLAY);
+        });
+
+        it('should be of the correct type if set to type stop', function () {
+            directive.setTypeToStop();
+
+            let parsedDirective = directive.parse();
+
+            assert.equal(parsedDirective[Constants.DIRECTIVE_PROPERTY_TYPE], Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_STOP);
+        });
+
+        it('should be of the correct type if set to type clear queue', function () {
+            directive.setTypeToClearQueue(Constants.CLEAR_BEHAVIOR_ENQUEUED);
+
+            let parsedDirective = directive.parse();
+
+            assert.equal(parsedDirective[Constants.DIRECTIVE_PROPERTY_TYPE], Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_CLEAR_QUEUE);
         });
     });
 });
