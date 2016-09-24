@@ -34,8 +34,7 @@ app.post('/delete', function (req, res) {
 
 app.post('/add', function (req, res) {
     var newClothing = {
-        name: req.body.name,
-        tags: req.body.tags
+        name: req.body.name
     };
 
     database.ref(req.body.name).set(newClothing);
