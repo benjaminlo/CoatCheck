@@ -6,7 +6,7 @@ var bodyParser = require('body-parser');
 
 var app = express();
 app.use(bodyParser.json()); // support json encoded bodies
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({extended: true}));
 
 // Initialize Firebase
 var config = {
@@ -20,11 +20,11 @@ firebase.initializeApp(config);
 var database = firebase.database();
 
 app.get('/closet', function (req, res) {
-    return database.ref('/').once('value').then(function(closet) {
+    return database.ref('/').once('value').then(function (closet) {
         res.setHeader('Content-Type', 'application/json');
         res.send(JSON.stringify(closet.val()));
         res.sendStatus(200);
-    })
+    });
 });
 
 app.post('/delete', function (req, res) {
