@@ -2,6 +2,7 @@
 
 const Constants = require('../alexa/constants');
 const Speech = require('../alexa/speech');
+const request = require('request');
 
 class CoatCheck {
 
@@ -46,9 +47,7 @@ class CoatCheck {
      */
     setIntentHandlers() {
         let intentHandlers = {};
-        intentHandlers[Constants.INTENT_ADD] = (event, response) => {
-            response.tell(new Speech(Constants.SPEECH_TYPE_TEXT, 'hello. i received an add intent'));
-        };
+        intentHandlers[Constants.INTENT_ADD] = addIntentHandler;
         intentHandlers[Constants.INTENT_ASK] = (event, response) => {
             response.tell(new Speech(Constants.SPEECH_TYPE_TEXT, 'hello. i received an ask intent'));
         };
@@ -66,5 +65,28 @@ class CoatCheck {
     }
 
 }
+
+let addIntentHandler = (event, response) => {
+    let clothing = event.request.intent.slots.ClothingName.value;
+
+    let options = {
+        url: 'http://coat-check.cfapps.io/add',
+        method: 'POST',
+        json: {
+            'name': clothing
+        }
+    };
+
+    return (callback) => {
+        request(options, (err, resp, body) => {
+            if (!err && resp.statusCode === 200) {
+                response.tell(new Speech(Constants.SPEECH_TYPE_TEXT, `I added ${clothing} to your closet.`));
+            } else {
+                response.tell(new Speech(Constants.SPEECH_TYPE_TEXT, `I had an issue communicating with your closet.`));
+            }
+            callback();
+        });
+    }
+};
 
 module.exports = CoatCheck;

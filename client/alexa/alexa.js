@@ -296,19 +296,25 @@ function handleIntent(event, context, callback) {
     let handler = handlers[event.request.intent.name];
 
     if (handler) {
-        handler(event, response);
+        let finalCallback = handler(event, response);
+        response.filterDirectives([
+            Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_PLAY,
+            Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_STOP,
+            Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_CLEAR_QUEUE
+        ]);
+
+        if (finalCallback) {
+            finalCallback(function () {
+                context.callbackWaitsForEmptyEventLoop = false;
+                callback(null, response._response);
+            });
+        } else {
+            context.callbackWaitsForEmptyEventLoop = false;
+            callback(null, response._response);
+        }
     } else {
         throw `Intent ${event.request.intent.name} not supported.`;
     }
-
-    response.filterDirectives([
-        Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_PLAY,
-        Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_STOP,
-        Constants.DIRECTIVE_TYPE_AUDIO_PLAYER_CLEAR_QUEUE
-    ]);
-
-    context.callbackWaitsForEmptyEventLoop = false;
-    callback(null, response._response);
 }
 
 /**
