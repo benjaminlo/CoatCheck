@@ -10,17 +10,26 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Initialize Firebase
 var config = {
-    apiKey: "AIzaSyBcBk7hKhaxnflgTI57qAevJchUIw6wtvE",
-    authDomain: "coat-check.firebaseapp.com",
-    databaseURL: "https://coat-check.firebaseio.com",
-    storageBucket: "coat-check.appspot.com",
-    messagingSenderId: "556056161259"
+    apiKey: "AIzaSyD4uwkrKivTCI4ss2lLaxXZ9RrfwfBdlbo",
+    authDomain: "coat-check-6b884.firebaseapp.com",
+    databaseURL: "https://coat-check-6b884.firebaseio.com",
+    storageBucket: "coat-check-6b884.appspot.com",
+    messagingSenderId: "348697547557"
 };
 firebase.initializeApp(config);
+var database = firebase.database();
 
-app.get('/', function (req, res) {
-    res.setHeader('Content-Type', 'application/json');
-    res.send(JSON.stringify(clothing));
+app.get('/closet', function (req, res) {
+    return database.ref('/').once('value').then(function(closet) {
+        res.setHeader('Content-Type', 'application/json');
+        res.send(JSON.stringify(closet.val()));
+        res.sendStatus(200)
+    })
+});
+
+app.post('/delete', function (req, res) {
+    database.ref(req.body.name).remove()
+    res.sendStatus(200)
 });
 
 app.post('/add', function (req, res) {
@@ -29,7 +38,7 @@ app.post('/add', function (req, res) {
         tags: req.body.tags
     }
 
-    firebase.database().ref('/').push(newClothing);
+    database.ref(req.body.name).set(newClothing)
     res.sendStatus(200)
 });
 
