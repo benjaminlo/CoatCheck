@@ -20,9 +20,52 @@ firebase.initializeApp(config);
 var database = firebase.database();
 
 app.get('/closet', function (req, res) {
-    return database.ref('/').once('value').then(function (closet) {
+    return database.ref('/').once('value').then(function (snapshot) {
         res.setHeader('Content-Type', 'application/json');
-        res.send(JSON.stringify(closet.val()));
+        res.send(JSON.stringify(snapshot.val()));
+        res.sendStatus(200);
+    });
+});
+
+app.get('/ask', function (req, res) {
+    return database.ref('/').once('value').then(function (snapshot) {
+        var requestedTags = JSON.parse(req.query.tags);
+        var closet = snapshot.val();
+        var tagDictionary = {
+            "sun": false,
+            "snow": false,
+            "rain": false,
+            "hot": false,
+            "moderate": false,
+            "cold": false
+        };
+        var suggestedClothing;
+
+        requestedTags.forEach(function (requestedTag) {
+            tagDictionary[requestedTag] = true;
+        });
+
+        for (var item in closet) {
+            if (closet.hasOwnProperty(item)) {
+                var score = 0;
+                var maxScore = 0;
+                var tags = closet[item].tags;
+                if (tags != null) {
+                    tags.forEach(function (tag) {
+                        if (tagDictionary[tag] === true) {
+                            score = score + 1;
+                        }
+                    });
+                    if (score > maxScore) {
+                        maxScore = score;
+                        suggestedClothing = item;
+                    }
+                }
+            }
+        }
+
+        res.setHeader('Content-Type', 'application/json');
+        res.send(JSON.stringify(suggestedClothing));
         res.sendStatus(200);
     });
 });
