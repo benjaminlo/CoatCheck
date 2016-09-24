@@ -66,5 +66,7 @@ module.exports = {
     TYPE_STRING: 'string',
 
     // Replace this with your intent names
-    YOUR_INTENT_NAME: 'YourIntent'
+    INTENT_ADD: 'COAT_CHECK_ADD',
+    INTENT_DELETE: 'COAT_CHECK_DELETE',
+    INTENT_ASK: 'COAT_CHECK_ASK'
 };

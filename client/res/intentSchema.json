@@ -1,0 +1,13 @@
+{
+  "intents": [
+    {
+      "intent": "COAT_CHECK.ADD"
+    },
+    {
+      "intent": "COAT_CHECK.DELETE"
+    },
+    {
+      "intent": "COAT_CHECK.ASK"
+    }
+  ]
+}

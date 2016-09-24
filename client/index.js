@@ -8,8 +8,7 @@ const APP_ID = ''; // replace with "amzn1.echo-sdk.amz-.app.[your-unique-value-h
 
 let onLaunch = (event, response) => {
     // Put your custom launch logic in here
-    response.ask(new Speech(Constants.SPEECH_TYPE_SSML, '<speak>Replace this with a launch menu.</speak>'),
-        new Speech(Constants.SPEECH_TYPE_SSML, '<speak>Replace this with reprompt text.</speak>'));
+    response.tell(new Speech(Constants.SPEECH_TYPE_TEXT, 'open menu'));
 };
 
 let onSessionEnded = (event) => {
@@ -18,9 +17,14 @@ let onSessionEnded = (event) => {
 };
 
 let intentHandlers = {};
-intentHandlers[Constants.YOUR_INTENT_NAME] = (event, response) => {
-    // do stuff
-    response.tell(new Speech(Constants.SPEECH_TYPE_SSML, '<speak>Replace this with your intent response.</speak>'));
+intentHandlers[Constants.INTENT_ADD] = (event, response) => {
+    response.tell(new Speech(Constants.SPEECH_TYPE_TEXT, 'hello world add'));
+};
+intentHandlers[Constants.INTENT_ASK] = (event, response) => {
+    response.tell(new Speech(Constants.SPEECH_TYPE_TEXT, 'hello world ask'));
+};
+intentHandlers[Constants.INTENT_DELETE] = (event, response) => {
+    response.tell(new Speech(Constants.SPEECH_TYPE_TEXT, 'hello world delete'));
 };
 
 // Remove this if you are not using Audio Player
