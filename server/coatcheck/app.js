@@ -23,26 +23,23 @@ app.get('/closet', function (req, res) {
     return database.ref('/').once('value').then(function(closet) {
         res.setHeader('Content-Type', 'application/json');
         res.send(JSON.stringify(closet.val()));
-        res.sendStatus(200)
+        res.sendStatus(200);
     })
 });
 
 app.post('/delete', function (req, res) {
-    database.ref(req.body.name).remove()
-    res.sendStatus(200)
+    database.ref(req.body.name).remove();
+    res.sendStatus(200);
 });
 
 app.post('/add', function (req, res) {
     var newClothing = {
         name: req.body.name,
         tags: req.body.tags
-    }
+    };
 
-    database.ref(req.body.name).set(newClothing)
-    res.sendStatus(200)
+    database.ref(req.body.name).set(newClothing);
+    res.sendStatus(200);
 });
 
-
-app.listen(3000, function () {
-    console.log('Example app listening on port 3000!');
-});
+app.listen(process.env.PORT || 3000);
