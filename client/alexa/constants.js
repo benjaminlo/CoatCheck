@@ -66,5 +66,41 @@ module.exports = {
     TYPE_STRING: 'string',
 
     // Replace this with your intent names
-    YOUR_INTENT_NAME: 'YourIntent'
+    INTENT_ADD: 'COAT_CHECK_ADD',
+    INTENT_DELETE: 'COAT_CHECK_DELETE',
+    INTENT_ASK: 'COAT_CHECK_ASK',
+
+    HTTP_METHOD_POST: 'POST',
+    HTTP_METHOD_GET: 'GET',
+    HTTP_RESPONSE_CODE_OK: 200,
+
+    URL_ADD: 'http://coat-check.cfapps.io/add',
+    URL_ASK: 'http://coat-check.cfapps.io/ask',
+    URL_DELETE: 'http://coat-check.cfapps.io/delete',
+
+    URL_ACCUWEATHER: 'http://apidev.accuweather.com/forecasts/v1/hourly/12hour/55488.json?apikey=HackuWeather2016&details=true&metric=true',
+
+    CLOTHING_KEY_NAME: 'name',
+    TAGS_KEY_NAME: 'tags',
+
+    JSON_KEY_URL: 'url',
+    JSON_KEY_METHOD: 'method',
+
+    TAG_HOT: 'hot',
+    TAG_MODERATE: 'moderate',
+    TAG_COLD: 'cold',
+    TAG_SUN: 'sun',
+    TAG_RAIN: 'rain',
+    TAG_SNOW: 'snow',
+
+    THRESHOLD_PROBABILITY: 50,
+    THRESHOLD_COLD: 10,
+    THRESHOLD_MODERATE: 20,
+
+    ALEXA_MESSAGE_OPEN_CLOSET: 'Opening your closet. You can add and remove clothing or say help.',
+    ALEXA_MESSAGE_ADDED: 'I added {0} to your closet.',
+    ALEXA_MESSAGE_DELETED: '{0} has been removed from your closet. What would you like to do?',
+    ALEXA_MESSAGE_NOT_FOUND: 'I\'m sorry I could not find {0} in your closet. What would you like to do?',
+    ALEXA_MESSAGE_SERVER_ERROR: 'I had an issue communicating with your closet.',
+    ALEXA_MESSAGE_REPROMPT: 'I didn\'t quite catch that. What would you like to do?'
 };

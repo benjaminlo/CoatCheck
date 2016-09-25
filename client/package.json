@@ -1,10 +1,14 @@
 {
-  "name": "alexa-starter-kit",
+  "name": "coat-check-client",
   "version": "1.0.0",
   "private": true,
-  "description": "A barebones start up kit for creating an Alexa skill.",
+  "description": "A hackathon project using Accuweather. Alexa interface portion.",
   "main": "index.js",
-  "dependencies": {},
+  "dependencies": {
+    "qs": "^6.2.1",
+    "request": "^2.75.0",
+    "string-format": "^0.5.0"
+  },
   "devDependencies": {
     "jsdoc": "^3.4.1",
     "mocha": "^3.0.2"

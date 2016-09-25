@@ -1,0 +1,25 @@
+{
+  "intents": [
+    {
+      "intent": "COAT_CHECK_ADD",
+      "slots": [
+        {
+          "name": "ClothingName",
+          "type": "CLOTHING_TYPE"
+        }
+      ]
+    },
+    {
+      "intent": "COAT_CHECK_DELETE",
+      "slots": [
+        {
+          "name": "ClothingName",
+          "type": "CLOTHING_TYPE"
+        }
+      ]
+    },
+    {
+      "intent": "COAT_CHECK_ASK"
+    }
+  ]
+}

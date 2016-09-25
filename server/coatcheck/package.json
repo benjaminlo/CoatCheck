@@ -1,0 +1,16 @@
+{
+  "name": "coat-check-server",
+  "version": "1.0.0",
+  "description": "A hackathon project using Accuweather. Firebase interface portion.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "TribalScale",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "firebase": "^3.4.0"
+  }
+}
