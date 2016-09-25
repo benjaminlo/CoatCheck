@@ -130,7 +130,7 @@ let askIntentHandler = (event, response) => {
 
             let options = {};
 
-            options[Constants.JSON_KEY_URL] = Constants.URL_ASK + '?tags=[' + queryString + ']';
+            options[Constants.JSON_KEY_URL] = format(Constants.URL_ASK, queryString);
             options[Constants.JSON_KEY_METHOD] = Constants.HTTP_METHOD_GET;
 
             request(options, (err, resp, bod) => {

@@ -75,7 +75,7 @@ module.exports = {
     HTTP_RESPONSE_CODE_OK: 200,
 
     URL_ADD: 'http://coat-check.cfapps.io/add',
-    URL_ASK: 'http://coat-check.cfapps.io/ask',
+    URL_ASK: 'http://coat-check.cfapps.io/ask?tags=[{0}]',
     URL_DELETE: 'http://coat-check.cfapps.io/delete',
 
     URL_ACCUWEATHER: 'http://apidev.accuweather.com/forecasts/v1/hourly/12hour/55488.json?apikey=HackuWeather2016&details=true&metric=true',
