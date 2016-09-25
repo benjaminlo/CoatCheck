@@ -69,11 +69,10 @@ let addIntentHandler = (event, response) => {
     let json = {};
     json[Constants.CLOTHING_KEY_NAME] = clothing;
 
-    let options = {
-        'url': Constants.URL_ADD,
-        'method': Constants.HTTP_METHOD_POST,
-        json
-    };
+    let options = {json};
+
+    options[Constants.JSON_KEY_URL] = Constants.URL_ADD;
+    options[Constants.JSON_KEY_METHOD] = Constants.HTTP_METHOD_POST;
 
     return (callback) => {
         request(options, (err, resp) => {
