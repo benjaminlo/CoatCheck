@@ -51,6 +51,7 @@ class CoatCheck {
         intentHandlers[Constants.INTENT_ADD] = addIntentHandler;
         intentHandlers[Constants.INTENT_ASK] = askIntentHandler;
         intentHandlers[Constants.INTENT_DELETE] = deleteIntentHandler;
+        intentHandlers[Constants.INTENT_HELP] = helpIntentHandler;
         this._alexa.setIntentHandlers(intentHandlers);
     }
 
@@ -147,20 +148,20 @@ let askIntentHandler = (event, response) => {
 
                 let message = '';
                 if (tagDictionary[Constants.TAG_SNOW]) {
-                    message = format(' with a {0} percent chance of snow', body.SnowProbability);
+                    message = format(Constants.ALEXA_MESSAGE_SNOW, body.SnowProbability);
                 } else if (tagDictionary[Constants.TAG_RAIN]) {
-                    message = format(' with a {0} percent chance of rain', body.RainProbability);
+                    message = format(Constants.ALEXA_MESSAGE_RAIN, body.RainProbability);
                 } else if (tagDictionary[Constants.TAG_SUN]) {
                     let cloudCover = body.CloudCover;
                     if (cloudCover === 0) {
-                        message = ' with clear skies';
+                        message = Constants.ALEXA_MESSAGE_CLEAR_SKIES;
                     } else {
-                        message = format(' with a {0} percent cloud cover', body.CloudCover);
+                        message = format(Constants.ALEXA_MESSAGE_CLOUD_COVER, body.CloudCover);
                     }
                 }
 
                 if (!err && resp.statusCode === Constants.HTTP_RESPONSE_CODE_OK) {
-                    response.tell(new Speech(Constants.SPEECH_TYPE_TEXT, format('It will be {0} degrees celsius{1}. You should wear your {2}.', temperature, message, item.name)));
+                    response.tell(new Speech(Constants.SPEECH_TYPE_TEXT, format(Constants.ALEXA_MESSAGE_SUGGESTION, temperature, message, item.name)));
                 } else {
                     response.tell(new Speech(Constants.SPEECH_TYPE_TEXT, Constants.ALEXA_MESSAGE_SERVER_ERROR));
                 }
@@ -195,6 +196,11 @@ let deleteIntentHandler = (event, response) => {
             callback();
         });
     };
+};
+
+let helpIntentHandler = (event, response) => {
+    response.ask(new Speech(Constants.SPEECH_TYPE_TEXT, Constants.ALEXA_MESSAGE_HELP),
+        new Speech(Constants.SPEECH_TYPE_TEXT, Constants.ALEXA_MESSAGE_REPROMPT));
 };
 
 module.exports = CoatCheck;
