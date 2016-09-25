@@ -1,6 +1,7 @@
 'use strict';
 
 const Constants = require('../alexa/constants.js');
+const format = require('string-format');
 const Speech = require('../alexa/speech.js');
 const request = require('request');
 
@@ -26,8 +27,8 @@ class CoatCheck {
      */
     setLaunchHandler() {
         this._alexa.setLaunchHandler((event, response) => {
-            response.ask(new Speech(Constants.SPEECH_TYPE_TEXT, 'Opening your closet. What do you want?'),
-                new Speech(Constants.SPEECH_TYPE_TEXT, 'Yo. I asked what you wanted.'));
+            response.ask(new Speech(Constants.SPEECH_TYPE_TEXT, Constants.ALEXA_MESSAGE_OPEN_CLOSET),
+                new Speech(Constants.SPEECH_TYPE_TEXT, Constants.ALEXA_MESSAGE_REPROMPT));
         });
     }
 
@@ -77,9 +78,9 @@ let addIntentHandler = (event, response) => {
     return (callback) => {
         request(options, (err, resp) => {
             if (!err && resp.statusCode === Constants.HTTP_RESPONSE_CODE_OK) {
-                response.tell(new Speech(Constants.SPEECH_TYPE_TEXT, `I added ${clothing} to your closet.`));
+                response.tell(new Speech(Constants.SPEECH_TYPE_TEXT, format(Constants.ALEXA_MESSAGE_ADDED, clothing)));
             } else {
-                response.tell(new Speech(Constants.SPEECH_TYPE_TEXT, `I had an issue communicating with your closet.`));
+                response.tell(new Speech(Constants.SPEECH_TYPE_TEXT, Constants.ALEXA_MESSAGE_SERVER_ERROR));
             }
             callback();
         });
@@ -88,10 +89,10 @@ let addIntentHandler = (event, response) => {
 
 let askIntentHandler = (event, response) => {
     return (callback) => {
-        let accuOptions = {
-            'url': Constants.URL_ACCUWEATHER,
-            'method': Constants.HTTP_METHOD_GET
-        };
+        let accuOptions = {};
+
+        accuOptions[Constants.JSON_KEY_URL] = Constants.URL_ACCUWEATHER;
+        accuOptions[Constants.JSON_KEY_METHOD] = Constants.HTTP_METHOD_GET;
 
         request(accuOptions, (error, _response, body) => {
             body = JSON.parse(body)[0];
@@ -128,17 +129,17 @@ let askIntentHandler = (event, response) => {
                 queryString += '"' + tag + '"';
             });
 
-            let options = {
-                'url': Constants.URL_ASK + '?tags=[' + queryString + ']',
-                'method': Constants.HTTP_METHOD_GET
-            };
+            let options = {};
+
+            options[Constants.JSON_KEY_URL] = Constants.URL_ASK + '?tags=[' + queryString + ']';
+            options[Constants.JSON_KEY_METHOD] = Constants.HTTP_METHOD_GET;
 
             request(options, (err, resp, bod) => {
                 let item = JSON.parse(bod);
                 if (!err && resp.statusCode === Constants.HTTP_RESPONSE_CODE_OK) {
-                    response.tell(new Speech(Constants.SPEECH_TYPE_TEXT, `You should wear your ${item.name}.`));
+                    response.tell(new Speech(Constants.SPEECH_TYPE_TEXT, format('You should wear your {0}.', item.name)));
                 } else {
-                    response.tell(new Speech(Constants.SPEECH_TYPE_TEXT, `I had an issue communicating with your closet.`));
+                    response.tell(new Speech(Constants.SPEECH_TYPE_TEXT, Constants.ALEXA_MESSAGE_SERVER_ERROR));
                 }
                 callback();
             });
@@ -153,19 +154,20 @@ let deleteIntentHandler = (event, response) => {
     json[Constants.CLOTHING_KEY_NAME] = clothing;
 
     let options = {
-        'url': Constants.URL_DELETE,
-        'method': Constants.HTTP_METHOD_POST,
         json
     };
+
+    options[Constants.JSON_KEY_URL] = Constants.URL_DELETE;
+    options[Constants.JSON_KEY_METHOD] = Constants.HTTP_METHOD_POST;
 
     return (callback) => {
         request(options, (err, resp) => {
             if (!err && resp.statusCode === Constants.HTTP_RESPONSE_CODE_OK) {
-                response.ask(new Speech(Constants.SPEECH_TYPE_TEXT, `${clothing} has been removed from your closet. What else would you like to do?`),
-                    new Speech(Constants.SPEECH_TYPE_TEXT, `I didn't quite catch that. What would you like to do?`));
+                response.ask(new Speech(Constants.SPEECH_TYPE_TEXT, format(Constants.ALEXA_MESSAGE_DELETED, clothing)),
+                    new Speech(Constants.SPEECH_TYPE_TEXT, Constants.ALEXA_MESSAGE_REPROMPT));
             } else {
-                response.ask(new Speech(Constants.SPEECH_TYPE_TEXT, `I'm sorry, I could not find ${clothing} in your closet. Please try again. What else would you like to do`),
-                    new Speech(Constants.SPEECH_TYPE_TEXT, `I didn't quite catch that. What would you like to do?`));
+                response.ask(new Speech(Constants.SPEECH_TYPE_TEXT, format(Constants.ALEXA_MESSAGE_NOT_FOUND, clothing)),
+                    new Speech(Constants.SPEECH_TYPE_TEXT, Constants.ALEXA_MESSAGE_REPROMPT));
             }
             callback();
         });
