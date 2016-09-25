@@ -1,3 +1,3 @@
-COAT_CHECK.ADD add
-COAT_CHECK.DELETE delete
-COAT_CHECK.ASK ask
+COAT_CHECK_ADD add {ClothingName}
+COAT_CHECK_DELETE delete {ClothingName}
+COAT_CHECK_ASK ask

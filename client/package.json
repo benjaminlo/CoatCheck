@@ -4,7 +4,9 @@
   "private": true,
   "description": "A barebones start up kit for creating an Alexa skill.",
   "main": "index.js",
-  "dependencies": {},
+  "dependencies": {
+    "request": "^2.75.0"
+  },
   "devDependencies": {
     "jsdoc": "^3.4.1",
     "mocha": "^3.0.2"

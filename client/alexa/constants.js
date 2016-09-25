@@ -68,5 +68,13 @@ module.exports = {
     // Replace this with your intent names
     INTENT_ADD: 'COAT_CHECK_ADD',
     INTENT_DELETE: 'COAT_CHECK_DELETE',
-    INTENT_ASK: 'COAT_CHECK_ASK'
+    INTENT_ASK: 'COAT_CHECK_ASK',
+
+    HTTP_METHOD_POST: 'POST',
+    HTTP_RESPONSE_CODE_OK: 200,
+
+    URL_ADD: 'http://coat-check.cfapps.io/add',
+    URL_DELETE: 'http://coat-check.cfapps.io/delete',
+
+    CLOTHING_KEY_NAME: 'name'
 };
