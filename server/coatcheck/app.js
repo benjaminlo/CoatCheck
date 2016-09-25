@@ -1,15 +1,18 @@
-var express = require('express');
-var clothing = require("./clothing.js");
-var http = require('http');
-var firebase = require("firebase");
-var bodyParser = require('body-parser');
+'use strict';
 
-var app = express();
+const Constants = require('./constants.js');
+const express = require('express');
+const clothing = require("./clothing.js");
+const http = require('http');
+const firebase = require("firebase");
+const bodyParser = require('body-parser');
+const app = express();
+
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({extended: true}));
 
 // Initialize Firebase
-var config = {
+let config = {
     apiKey: "AIzaSyD4uwkrKivTCI4ss2lLaxXZ9RrfwfBdlbo",
     authDomain: "coat-check-6b884.firebaseapp.com",
     databaseURL: "https://coat-check-6b884.firebaseio.com",
@@ -17,7 +20,7 @@ var config = {
     messagingSenderId: "348697547557"
 };
 firebase.initializeApp(config);
-var database = firebase.database();
+let database = firebase.database();
 
 app.get('/closet', function (req, res) {
     return database.ref('/').once('value').then(function (snapshot) {
@@ -29,27 +32,28 @@ app.get('/closet', function (req, res) {
 
 app.get('/ask', function (req, res) {
     return database.ref('/').once('value').then(function (snapshot) {
-        var requestedTags = JSON.parse(req.query.tags);
-        var closet = snapshot.val();
-        var tagDictionary = {
-            "sun": false,
-            "snow": false,
-            "rain": false,
-            "hot": false,
-            "moderate": false,
-            "cold": false
+        let requestedTags = JSON.parse(req.query.tags);
+        let closet = snapshot.val();
+        let tagDictionary = {};
+        tagDictionary[Constants.TAG_HOT] = false;
+        tagDictionary[Constants.TAG_MODERATE] = false;
+        tagDictionary[Constants.TAG_COLD] = false;
+        tagDictionary[Constants.TAG_SUN] = false;
+        tagDictionary[Constants.TAG_RAIN] = false;
+        tagDictionary[Constants.TAG_SNOW] = false;
+        let suggestedClothing = {
+            name: ''
         };
-        var suggestedClothing;
 
         requestedTags.forEach(function (requestedTag) {
             tagDictionary[requestedTag] = true;
         });
 
-        for (var item in closet) {
+        for (let item in closet) {
             if (closet.hasOwnProperty(item)) {
-                var score = 0;
-                var maxScore = 0;
-                var tags = closet[item].tags;
+                let score = 0;
+                let maxScore = 0;
+                let tags = closet[item].tags;
                 if (tags != null) {
                     tags.forEach(function (tag) {
                         if (tagDictionary[tag] === true) {
@@ -58,7 +62,7 @@ app.get('/ask', function (req, res) {
                     });
                     if (score > maxScore) {
                         maxScore = score;
-                        suggestedClothing = item;
+                        suggestedClothing.name = item;
                     }
                 }
             }
@@ -76,7 +80,7 @@ app.post('/delete', function (req, res) {
 });
 
 app.post('/add', function (req, res) {
-    var newClothing = {
+    let newClothing = {
         name: req.body.name
     };
 

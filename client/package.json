@@ -5,6 +5,7 @@
   "description": "A barebones start up kit for creating an Alexa skill.",
   "main": "index.js",
   "dependencies": {
+    "qs": "^6.2.1",
     "request": "^2.75.0"
   },
   "devDependencies": {

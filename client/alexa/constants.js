@@ -71,10 +71,26 @@ module.exports = {
     INTENT_ASK: 'COAT_CHECK_ASK',
 
     HTTP_METHOD_POST: 'POST',
+    HTTP_METHOD_GET: 'GET',
     HTTP_RESPONSE_CODE_OK: 200,
 
     URL_ADD: 'http://coat-check.cfapps.io/add',
+    URL_ASK: 'http://coat-check.cfapps.io/ask',
     URL_DELETE: 'http://coat-check.cfapps.io/delete',
 
-    CLOTHING_KEY_NAME: 'name'
+    URL_ACCUWEATHER: 'http://apidev.accuweather.com/forecasts/v1/hourly/12hour/55488.json?apikey=HackuWeather2016&details=true&metric=true',
+
+    CLOTHING_KEY_NAME: 'name',
+    TAGS_KEY_NAME: 'tags',
+
+    TAG_HOT: 'hot',
+    TAG_MODERATE: 'moderate',
+    TAG_COLD: 'cold',
+    TAG_SUN: 'sun',
+    TAG_RAIN: 'rain',
+    TAG_SNOW: 'snow',
+
+    THRESHOLD_PROBABILITY: 50,
+    THRESHOLD_COLD: 10,
+    THRESHOLD_MODERATE: 20
 };
