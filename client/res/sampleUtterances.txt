@@ -1,3 +1,35 @@
 COAT_CHECK_ADD add {ClothingName}
+COAT_CHECK_ADD add my {ClothingName}
+COAT_CHECK_ADD add {ClothingName} to my closet
+COAT_CHECK_ADD put {ClothingName}
+COAT_CHECK_ADD put {ClothingName} in my closet
+COAT_CHECK_ADD I bought a {ClothingName}
+COAT_CHECK_ADD I bought a new {ClothingName}
+COAT_CHECK_ADD I have a new {ClothingName}
+
 COAT_CHECK_DELETE delete {ClothingName}
-COAT_CHECK_ASK ask
+COAT_CHECK_DELETE delete {ClothingName}
+COAT_CHECK_DELETE remove {ClothingName} from my closet
+COAT_CHECK_DELETE remove {ClothingName} from my closet
+
+COAT_CHECK_ASK what should I wear today
+COAT_CHECK_ASK what do I wear today
+COAT_CHECK_ASK I don't know what to wear
+COAT_CHECK_ASK I dunno what to wear
+COAT_CHECK_ASK tell me what I should wear
+COAT_CHECK_ASK what clothes should I wear
+COAT_CHECK_ASK what to wear
+COAT_CHECK_ASK what's the weather like today
+COAT_CHECK_ASK what is the weather like
+COAT_CHECK_ASK what's the weather
+COAT_CHECK_ASK what's the temperature outside
+COAT_CHECK_ASK what is the temperature
+COAT_CHECK_ASK is it hot today
+COAT_CHECK_ASK is it warm today
+COAT_CHECK_ASK is it moderate today
+COAT_CHECK_ASK is it cold today
+COAT_CHECK_ASK is it rainy today
+COAT_CHECK_ASK is it raining today
+COAT_CHECK_ASK is it snowy today
+COAT_CHECK_ASK is it snowing today
+COAT_CHECK_ASK is it nice out today

@@ -69,11 +69,10 @@ let addIntentHandler = (event, response) => {
     let json = {};
     json[Constants.CLOTHING_KEY_NAME] = clothing;
 
-    let options = {
-        'url': Constants.URL_ADD,
-        'method': Constants.HTTP_METHOD_POST,
-        json
-    };
+    let options = {json};
+
+    options[Constants.JSON_KEY_URL] = Constants.URL_ADD;
+    options[Constants.JSON_KEY_METHOD] = Constants.HTTP_METHOD_POST;
 
     return (callback) => {
         request(options, (err, resp) => {
@@ -131,13 +130,37 @@ let askIntentHandler = (event, response) => {
 
             let options = {};
 
-            options[Constants.JSON_KEY_URL] = Constants.URL_ASK + '?tags=[' + queryString + ']';
+            options[Constants.JSON_KEY_URL] = format(Constants.URL_ASK, queryString);
             options[Constants.JSON_KEY_METHOD] = Constants.HTTP_METHOD_GET;
 
             request(options, (err, resp, bod) => {
                 let item = JSON.parse(bod);
+
+                let tagDictionary = {};
+                tagDictionary[Constants.TAG_SUN] = false;
+                tagDictionary[Constants.TAG_RAIN] = false;
+                tagDictionary[Constants.TAG_SNOW] = false;
+
+                tags.forEach(function (tag) {
+                    tagDictionary[tag] = true;
+                });
+
+                let message = '';
+                if (tagDictionary[Constants.TAG_SNOW]) {
+                    message = format(' with a {0} percent chance of snow', body.SnowProbability);
+                } else if (tagDictionary[Constants.TAG_RAIN]) {
+                    message = format(' with a {0} percent chance of rain', body.RainProbability);
+                } else if (tagDictionary[Constants.TAG_SUN]) {
+                    let cloudCover = body.CloudCover;
+                    if (cloudCover === 0) {
+                        message = ' with clear skies';
+                    } else {
+                        message = format(' with a {0} percent cloud cover', body.CloudCover);
+                    }
+                }
+
                 if (!err && resp.statusCode === Constants.HTTP_RESPONSE_CODE_OK) {
-                    response.tell(new Speech(Constants.SPEECH_TYPE_TEXT, format('You should wear your {0}.', item.name)));
+                    response.tell(new Speech(Constants.SPEECH_TYPE_TEXT, format('It will be {0} degrees celsius{1}. You should wear your {2}.', temperature, message, item.name)));
                 } else {
                     response.tell(new Speech(Constants.SPEECH_TYPE_TEXT, Constants.ALEXA_MESSAGE_SERVER_ERROR));
                 }
