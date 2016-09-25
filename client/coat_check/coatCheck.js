@@ -51,9 +51,7 @@ class CoatCheck {
         intentHandlers[Constants.INTENT_ASK] = (event, response) => {
             response.tell(new Speech(Constants.SPEECH_TYPE_TEXT, 'hello. i received an ask intent'));
         };
-        intentHandlers[Constants.INTENT_DELETE] = (event, response) => {
-            response.tell(new Speech(Constants.SPEECH_TYPE_TEXT, 'hello. i received a delete intent'));
-        };
+        intentHandlers[Constants.INTENT_DELETE] = deleteIntentHandler;
         this._alexa.setIntentHandlers(intentHandlers);
     }
 
@@ -69,24 +67,51 @@ class CoatCheck {
 let addIntentHandler = (event, response) => {
     let clothing = event.request.intent.slots.ClothingName.value;
 
+    let json = {};
+    json[Constants.CLOTHING_KEY_NAME] = clothing;
+
     let options = {
-        url: 'http://coat-check.cfapps.io/add',
-        method: 'POST',
-        json: {
-            'name': clothing
-        }
+        'url': Constants.URL_ADD,
+        'method': Constants.HTTP_METHOD_POST,
+        json
     };
 
     return (callback) => {
-        request(options, (err, resp, body) => {
-            if (!err && resp.statusCode === 200) {
+        request(options, (err, resp) => {
+            if (!err && resp.statusCode === Constants.HTTP_RESPONSE_CODE_OK) {
                 response.tell(new Speech(Constants.SPEECH_TYPE_TEXT, `I added ${clothing} to your closet.`));
             } else {
                 response.tell(new Speech(Constants.SPEECH_TYPE_TEXT, `I had an issue communicating with your closet.`));
             }
             callback();
         });
-    }
+    };
+};
+
+let deleteIntentHandler = (event, response) => {
+    let clothing = event.request.intent.slots.ClothingName.value;
+
+    let json = {};
+    json[Constants.CLOTHING_KEY_NAME] = clothing;
+
+    let options = {
+        'url': Constants.URL_DELETE,
+        'method': Constants.HTTP_METHOD_POST,
+        json
+    };
+
+    return (callback) => {
+        request(options, (err, resp) => {
+            if (!err && resp.statusCode === Constants.HTTP_RESPONSE_CODE_OK) {
+                response.ask(new Speech(Constants.SPEECH_TYPE_TEXT, `${clothing} has been removed from your closet. What else would you like to do?`),
+                    new Speech(Constants.SPEECH_TYPE_TEXT, `I didn't quite catch that. What would you like to do?`));
+            } else {
+                response.ask(new Speech(Constants.SPEECH_TYPE_TEXT, `I'm sorry, I could not find ${clothing} in your closet. Please try again. What else would you like to do`),
+                    new Speech(Constants.SPEECH_TYPE_TEXT, `I didn't quite catch that. What would you like to do?`));
+            }
+            callback();
+        });
+    };
 };
 
 module.exports = CoatCheck;
