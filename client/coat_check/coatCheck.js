@@ -136,24 +136,21 @@ let askIntentHandler = (event, response) => {
             request(options, (err, resp, bod) => {
                 let item = JSON.parse(bod);
 
-                let isSnow = false;
-                let isRain = false;
-                let isSun = false;
-                tags.forEach(tag => {
-                    if (tag === Constants.TAG_SNOW) {
-                        isSnow = true;
-                    } else if (tag === Constants.TAG_RAIN) {
-                        isRain = true;
-                    } else if (tag === Constants.TAG_SUN) {
-                        isSun = true;
-                    }
+                let tagDictionary = {};
+                tagDictionary[Constants.TAG_SUN] = false;
+                tagDictionary[Constants.TAG_RAIN] = false;
+                tagDictionary[Constants.TAG_SNOW] = false;
+
+                tags.forEach(function (tag) {
+                    tagDictionary[tag] = true;
                 });
+
                 let message = '';
-                if (isSnow) {
+                if (tagDictionary[Constants.TAG_SNOW]) {
                     message = format(' with a {0} percent chance of snow', body.SnowProbability);
-                } else if (isRain) {
+                } else if (tagDictionary[Constants.TAG_RAIN]) {
                     message = format(' with a {0} percent chance of rain', body.RainProbability);
-                } else if (isSun) {
+                } else if (tagDictionary[Constants.TAG_SUN]) {
                     let cloudCover = body.CloudCover;
                     if (cloudCover === 0) {
                         message = ' with clear skies';
