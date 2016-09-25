@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = {
     VERSION_NUMBER: '1.0',
 
@@ -109,5 +111,3 @@ module.exports = {
     ALEXA_MESSAGE_CLOUD_COVER: ' with a {0} percent cloud cover',
     ALEXA_MESSAGE_SUGGESTION: 'It will be {0} degrees celsius{1}. You should wear your {2}.'
 };
-
-'use strict';
