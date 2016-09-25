@@ -135,8 +135,35 @@ let askIntentHandler = (event, response) => {
 
             request(options, (err, resp, bod) => {
                 let item = JSON.parse(bod);
+
+                let isSnow = false;
+                let isRain = false;
+                let isSun = false;
+                tags.forEach(tag => {
+                    if (tag === Constants.TAG_SNOW) {
+                        isSnow = true;
+                    } else if (tag === Constants.TAG_RAIN) {
+                        isRain = true;
+                    } else if (tag === Constants.TAG_SUN) {
+                        isSun = true;
+                    }
+                });
+                let message = '';
+                if (isSnow) {
+                    message = format(' with a {0} percent chance of snow', body.SnowProbability);
+                } else if (isRain) {
+                    message = format(' with a {0} percent chance of rain', body.RainProbability);
+                } else if (isSun) {
+                    let cloudCover = body.CloudCover;
+                    if (cloudCover === 0) {
+                        message = ' with clear skies';
+                    } else {
+                        message = format(' with a {0} percent cloud cover', body.CloudCover);
+                    }
+                }
+
                 if (!err && resp.statusCode === Constants.HTTP_RESPONSE_CODE_OK) {
-                    response.tell(new Speech(Constants.SPEECH_TYPE_TEXT, format('You should wear your {0}.', item.name)));
+                    response.tell(new Speech(Constants.SPEECH_TYPE_TEXT, format('It will be {0} degrees celsius{1}. You should wear your {2}.', temperature, message, item.name)));
                 } else {
                     response.tell(new Speech(Constants.SPEECH_TYPE_TEXT, Constants.ALEXA_MESSAGE_SERVER_ERROR));
                 }
