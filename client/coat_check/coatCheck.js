@@ -1,7 +1,7 @@
 'use strict';
 
-const Constants = require('../alexa/constants');
-const Speech = require('../alexa/speech');
+const Constants = require('../alexa/constants.js');
+const Speech = require('../alexa/speech.js');
 const request = require('request');
 
 class CoatCheck {
@@ -48,9 +48,7 @@ class CoatCheck {
     setIntentHandlers() {
         let intentHandlers = {};
         intentHandlers[Constants.INTENT_ADD] = addIntentHandler;
-        intentHandlers[Constants.INTENT_ASK] = (event, response) => {
-            response.tell(new Speech(Constants.SPEECH_TYPE_TEXT, 'hello. i received an ask intent'));
-        };
+        intentHandlers[Constants.INTENT_ASK] = askIntentHandler;
         intentHandlers[Constants.INTENT_DELETE] = deleteIntentHandler;
         this._alexa.setIntentHandlers(intentHandlers);
     }
@@ -84,6 +82,66 @@ let addIntentHandler = (event, response) => {
                 response.tell(new Speech(Constants.SPEECH_TYPE_TEXT, `I had an issue communicating with your closet.`));
             }
             callback();
+        });
+    };
+};
+
+let askIntentHandler = (event, response) => {
+    return (callback) => {
+        let accuOptions = {
+            'url': Constants.URL_ACCUWEATHER,
+            'method': Constants.HTTP_METHOD_GET
+        };
+
+        request(accuOptions, (error, _response, body) => {
+            body = JSON.parse(body)[0];
+            let tags = [];
+            let temperature = body.Temperature.Value;
+
+            if (temperature < Constants.THRESHOLD_COLD) {
+                tags.push(Constants.TAG_COLD);
+            } else if (temperature < Constants.THRESHOLD_MODERATE) {
+                tags.push(Constants.TAG_MODERATE);
+            } else {
+                tags.push(Constants.TAG_HOT);
+            }
+
+            if (body.PrecipitationProbability > Constants.THRESHOLD_PROBABILITY) {
+                if (body.RainProbability > Constants.THRESHOLD_PROBABILITY) {
+                    tags.push(Constants.TAG_RAIN);
+                }
+                if (body.SnowProbability > Constants.THRESHOLD_PROBABILITY || body.IceProbability > Constants.THRESHOLD_PROBABILITY) {
+                    tags.push(Constants.TAG_SNOW);
+                }
+            }
+
+            if (body.CloudCover < Constants.THRESHOLD_PROBABILITY) {
+                tags.push(Constants.TAG_SUN);
+            }
+
+            let queryString = '';
+
+            tags.forEach((tag, i) => {
+                if (i > 0) {
+                    queryString += ',';
+                }
+                queryString += '"' + tag + '"';
+            });
+
+            let options = {
+                'url': Constants.URL_ASK + '?tags=[' + queryString + ']',
+                'method': Constants.HTTP_METHOD_GET
+            };
+
+            request(options, (err, resp, bod) => {
+                let item = JSON.parse(bod);
+                if (!err && resp.statusCode === Constants.HTTP_RESPONSE_CODE_OK) {
+                    response.tell(new Speech(Constants.SPEECH_TYPE_TEXT, `You should wear your ${item.name}.`));
+                } else {
+                    response.tell(new Speech(Constants.SPEECH_TYPE_TEXT, `I had an issue communicating with your closet.`));
+                }
+                callback();
+            });
         });
     };
 };
