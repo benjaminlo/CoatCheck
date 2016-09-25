@@ -69,6 +69,7 @@ module.exports = {
     INTENT_ADD: 'COAT_CHECK_ADD',
     INTENT_DELETE: 'COAT_CHECK_DELETE',
     INTENT_ASK: 'COAT_CHECK_ASK',
+    INTENT_HELP: 'COAT_CHECK_HELP',
 
     HTTP_METHOD_POST: 'POST',
     HTTP_METHOD_GET: 'GET',
@@ -98,9 +99,15 @@ module.exports = {
     THRESHOLD_MODERATE: 20,
 
     ALEXA_MESSAGE_OPEN_CLOSET: 'Opening your closet. You can add and remove clothing or say help.',
+    ALEXA_MESSAGE_HELP: 'Here are some things you can say: What should I wear?, What is the weather today? or Add my blue T-Shirt to my closet. So how can I help you?',
     ALEXA_MESSAGE_ADDED: 'I added {0} to your closet.',
     ALEXA_MESSAGE_DELETED: 'Your {0} has been removed from your closet. What would you like to do?',
     ALEXA_MESSAGE_NOT_FOUND: 'I\'m sorry I could not find {0} in your closet. What would you like to do?',
     ALEXA_MESSAGE_SERVER_ERROR: 'I had an issue communicating with your closet.',
-    ALEXA_MESSAGE_REPROMPT: 'I didn\'t quite catch that. What would you like to do?'
+    ALEXA_MESSAGE_REPROMPT: 'I didn\'t quite catch that. What would you like to do?',
+    ALEXA_MESSAGE_SNOW: ' with a {0} percent chance of snow',
+    ALEXA_MESSAGE_RAIN: ' with a {0} percent chance of rain',
+    ALEXA_MESSAGE_CLEAR_SKIES: ' with clear skies',
+    ALEXA_MESSAGE_CLOUD_COVER: ' with a {0} percent cloud cover',
+    ALEXA_MESSAGE_SUGGESTION: 'It will be {0} degrees celsius{1}. You should wear your {2}.'
 };

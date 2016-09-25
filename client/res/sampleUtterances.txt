@@ -33,3 +33,7 @@ COAT_CHECK_ASK is it raining today
 COAT_CHECK_ASK is it snowy today
 COAT_CHECK_ASK is it snowing today
 COAT_CHECK_ASK is it nice out today
+
+COAT_CHECK_HELP help
+COAT_CHECK_HELP I need help
+COAT_CHECK_HELP what can I do

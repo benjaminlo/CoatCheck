@@ -20,6 +20,9 @@
     },
     {
       "intent": "COAT_CHECK_ASK"
+    },
+    {
+      "intent": "COAT_CHECK_HELP"
     }
   ]
 }
