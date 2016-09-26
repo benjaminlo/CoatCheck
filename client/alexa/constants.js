@@ -101,6 +101,7 @@ module.exports = {
     ALEXA_MESSAGE_OPEN_CLOSET: 'Opening your closet. You can add and remove clothing or say help.',
     ALEXA_MESSAGE_HELP: 'Here are some things you can say: What should I wear?, What is the weather today? or Add my blue T-Shirt to my closet. So how can I help you?',
     ALEXA_MESSAGE_ADDED: 'I added {0} to your closet.',
+    ALEXA_MESSAGE_ONBOARDING_SEASON: 'Is this item meant for spring, summer, fall, or winter?',
     ALEXA_MESSAGE_DELETED: 'Your {0} has been removed from your closet. What would you like to do?',
     ALEXA_MESSAGE_NOT_FOUND: 'I\'m sorry I could not find {0} in your closet. What would you like to do?',
     ALEXA_MESSAGE_SERVER_ERROR: 'I had an issue communicating with your closet.',

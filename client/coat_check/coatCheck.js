@@ -78,7 +78,8 @@ let addIntentHandler = (event, response) => {
     return (callback) => {
         request(options, (err, resp) => {
             if (!err && resp.statusCode === Constants.HTTP_RESPONSE_CODE_OK) {
-                response.tell(new Speech(Constants.SPEECH_TYPE_TEXT, format(Constants.ALEXA_MESSAGE_ADDED, clothing)));
+                response.ask(new Speech(Constants.SPEECH_TYPE_TEXT, format(Constants.ALEXA_MESSAGE_ADDED + Constants.ALEXA_MESSAGE_ONBOARDING_SEASON, clothing)),
+                    new Speech(Constants.SPEECH_TYPE_TEXT, "reprompt"));
             } else {
                 response.tell(new Speech(Constants.SPEECH_TYPE_TEXT, Constants.ALEXA_MESSAGE_SERVER_ERROR));
             }

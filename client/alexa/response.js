@@ -54,6 +54,10 @@ class Response {
         this._directives = [];
     }
 
+    addSessionAttributes(sessionAttributes) {
+        this._sessionAttributes = sessionAttributes;
+    }
+
     /**
      * Responds to the Alexa skill with a JSON object indicating that the Echo should prompt the user with
      * text-to-speech audio as specified in speech and then wait for a response. This method cannot be used if
@@ -76,11 +80,17 @@ class Response {
             throw Constants.ERROR_MESSAGE_INVALID_TYPE;
         }
 
-        this._response = buildSpeechletResponse({
+        let options = {
             speech,
             reprompt: repromptSpeech,
             shouldEndSession: false
-        });
+        };
+
+        if (this._sessionAttributes) {
+            options.session = {attributes: this._sessionAttributes};
+        }
+
+        this._response = buildSpeechletResponse(options);
     }
 
     /**
@@ -108,6 +118,7 @@ class Response {
         }
 
         this._response = buildSpeechletResponse({
+            session: {attributes: this._sessionAttributes},
             speech,
             reprompt: repromptSpeech,
             card,
@@ -134,6 +145,7 @@ class Response {
         }
 
         this._response = buildSpeechletResponse({
+            session: {attributes: this._sessionAttributes},
             speech,
             shouldEndSession: true
         });
@@ -161,6 +173,7 @@ class Response {
         }
 
         this._response = buildSpeechletResponse({
+            session: {attributes: this._sessionAttributes},
             speech,
             card,
             shouldEndSession: true
